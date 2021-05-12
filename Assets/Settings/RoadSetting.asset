@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc445d3158a65494ba59af1adeecfd4e, type: 3}
+  m_Name: RoadSetting
+  m_EditorClassIdentifier: 
+  Road: {fileID: 3233234882194792976, guid: 35f0ed58117676041a82789d9bc2b4dc, type: 3}
+  existingRoadObjectCount: 8
+  minRoadLength: 25
+  maxRoadLength: 100
+  roadWidthHalf: 8
+  roadHeightHalf: 15
+  roadTransportAfter: 3
