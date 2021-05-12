@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Project.Road
 {
     public class RoadObjectsGenerator : MonoBehaviour
     {
-        [SerializeField, Range(0, 100)] private int maxBarricadeCount;
-        [SerializeField, Range(0, 4)] private int coinCountX5;
-
+        [SerializeField] private RoadSetting setting;
 
         private float roadWidthHalf;
         private float roadHeightHalf;
@@ -21,6 +14,13 @@ namespace Project.Road
             roadHeightHalf = ProceduralRoadGenerator.instance.RoadHalfHeight;
         }
 
+        private void GenerateRoadObjects(Transform road)
+        {
+            int barricadeCount = Random.Range(0, setting.maxBarricadeCount);
 
+            for (int i = 0; i < barricadeCount; i++)
+            {
+            }
+        }
     }
 }
