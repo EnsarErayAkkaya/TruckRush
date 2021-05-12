@@ -70,20 +70,23 @@ namespace Project.Road
         private void GenerateBarricade()
         {
             Debug.Log("Generating Barricade");
-            RoadBlock block = null;
             if(onZAxis)
             {
-                if (roadSegmentation.AllocateSpace(setting.barricadeSetting.barricadeLengthHalf * 2, ref block))
+                float value = roadSegmentation.AllocateSpace(setting.barricadeSetting.barricadeLengthHalf * 2);
+                if (value != -1)
                 {
-                    Debug.Log("Space Allocated, block: " + block.ToString());
+                    Debug.Log("Space Allocated");
+                    spawnPos.z = value;
                     barricadeSpawner.Spawn(spawnPos, onZAxis);
                 }
             }
             else
             {
-                if (roadSegmentation.AllocateSpace(setting.barricadeSetting.barricadeLengthHalf * 2, ref block))
+                float value = roadSegmentation.AllocateSpace(setting.barricadeSetting.barricadeLengthHalf * 2);
+                if (value != -1)
                 {
                     Debug.Log("Space Allocated");
+                    spawnPos.x = value;
                     barricadeSpawner.Spawn(spawnPos, onZAxis);
                 }
             }
@@ -91,9 +94,8 @@ namespace Project.Road
         private void GenerateEmptySpace()
         {
             Debug.Log("Generating EmptySpace");
-            RoadBlock block = null;
             float length = Random.Range(setting.minEmptySpaceLength, setting.maxEmptySpaceLength);
-            roadSegmentation.AllocateSpace(length, ref block);
+            roadSegmentation.AllocateSpace(length);
         }
         private int ObjectCountAccordingToRoadLength(float length)
         {

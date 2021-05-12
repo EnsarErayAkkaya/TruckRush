@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Project.Road
 {
@@ -12,47 +13,31 @@ namespace Project.Road
         public float EndingPoint => endingPoint;
         public float RoadLength => endingPoint - startingPoint;
 
-        private List<RoadBlock> roadAllocations;
+        private float currentPoint;
 
         public RoadSegmentation()
         {
-            roadAllocations = new List<RoadBlock>();
+            currentPoint = startingPoint;
         }
         public void Set(float startingPoint, float endingPoint)
         {
             this.startingPoint = startingPoint;
             this.endingPoint = endingPoint;
-            roadAllocations.Clear();
+            currentPoint = startingPoint;
         }
         /// <summary>
         /// Allocate first empty space with requested size
         /// </summary>
         /// <param name="requestedLength"></param>
         /// <returns></returns>
-        public bool AllocateSpace(float requestedLength, ref RoadBlock block)
+        public float AllocateSpace(float requestedLength)
         {
-            float currentPoint = startingPoint;
-            if (roadAllocations.Count > 0)
-            {
-                for (int i = 0; i < roadAllocations.Count; i++)
-                {
-                    float spaceLength = roadAllocations[i].startPoint - currentPoint;
-                    if (spaceLength >= requestedLength)
-                    {
-                        block = new RoadBlock(currentPoint, currentPoint + requestedLength);
-                        roadAllocations.Insert(i, block);
-                        return true;
-                    }
-                    currentPoint = roadAllocations[i].endPoint;
-                }
-            }
             if (currentPoint + requestedLength <= endingPoint)
             {
-                block = new RoadBlock(currentPoint, currentPoint + requestedLength);
-                roadAllocations.Add(block);
-                return true;
+                currentPoint += requestedLength;
+                return currentPoint;
             }
-            return false;
+            return -1;
         }
     }
 }
