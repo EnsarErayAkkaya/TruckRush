@@ -18,6 +18,9 @@ namespace Project.Road
         private List<Transform> roads;
         private int roadIndex = 0;
 
+        public float RoadHalfWidth => roadWidthHalf;
+        public float RoadHalfHeight => roadHeightHalf;
+
         public static ProceduralRoadGenerator instance;
         private void Awake()
         {
