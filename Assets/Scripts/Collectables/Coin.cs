@@ -8,6 +8,5 @@ namespace Project.Collectables
 {
     public class Coin : Collectable
     {
-
     }
 }

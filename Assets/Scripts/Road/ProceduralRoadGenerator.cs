@@ -10,9 +10,10 @@ namespace Project.Road
         [SerializeField] private RoadSetting setting;
         [SerializeField] private RoadObjectsGenerator roadObjectsGenerator;
         private Vector3 pos;
-        private List<Transform> roads;
+        private List<Road> roads;
         private int roadIndex = 0;
 
+        public int RoadIndex => roadIndex;
         public RoadSetting Setting => setting;
 
         public static ProceduralRoadGenerator instance;
@@ -22,7 +23,7 @@ namespace Project.Road
         }
         private void Start()
         {
-            roads = new List<Transform>();
+            roads = new List<Road>();
             
             pos.y = -setting.roadHeightHalf;
             CreateRoads();
@@ -34,29 +35,29 @@ namespace Project.Road
             {
                 float roadLength = Random.Range(setting.minRoadLength, setting.maxRoadLength);
                 float roadPos = roadLength / 2;
-                GameObject road;
+                Road road;
                 if (roadIndex % 2 == 1) // on X Axis
                 {
                     pos.x += roadPos;
-                    road = Instantiate(setting.Road, pos, Quaternion.identity);
+                    road = Instantiate(setting.Road, pos, Quaternion.identity).GetComponent<Road>();
                     road.transform.localScale = new Vector3(roadLength, setting.roadHeightHalf * 2, setting.roadWidthHalf * 2);
                     pos.x += roadPos - setting.roadWidthHalf;
                     pos.z += setting.roadWidthHalf;
-                    roadObjectsGenerator.GenerateRoadObjects(road.transform, false, (roadLength - setting.roadWidthHalf * 2));
+                    roadObjectsGenerator.GenerateRoadObjects(road, false, (roadLength - setting.roadWidthHalf * 2));
                 }
                 else // on Z axis
                 {
                     pos.z += roadPos;
-                    road = Instantiate(setting.Road, pos, Quaternion.identity);
+                    road = Instantiate(setting.Road, pos, Quaternion.identity).GetComponent<Road>();
                     road.transform.localScale = new Vector3(setting.roadWidthHalf * 2, setting.roadHeightHalf * 2, roadLength);
                     pos.z += roadPos - setting.roadWidthHalf;
                     pos.x += setting.roadWidthHalf;
-                    roadObjectsGenerator.GenerateRoadObjects(road.transform, true, (roadLength - setting.roadWidthHalf * 2));
+                    roadObjectsGenerator.GenerateRoadObjects(road, true, (roadLength - setting.roadWidthHalf * 2));
                 }
-                roads.Add(road.transform);
+                roads.Add(road);
             }
         }
-        public void TruckRoadIndexSet(Transform road)
+        public void TruckRoadIndexSet(Road road)
         {
             int currentRoad = roads.IndexOf(road);
             if(currentRoad >= setting.roadTransportAfter)
@@ -69,22 +70,25 @@ namespace Project.Road
             roadIndex++;
             float roadLength = Random.Range(setting.minRoadLength, setting.maxRoadLength);
             float roadPos = roadLength / 2;
-            Transform road = roads[0];
+            Road road = roads[0];
+            road.Clear();
             if (roadIndex % 2 == 0) // on X axis, this changes here I dont know why :)
             {
                 pos.x += roadPos;
-                road.position = pos;
+                road.transform.position = pos;
                 road.transform.localScale = new Vector3(roadLength, setting.roadHeightHalf * 2, setting.roadWidthHalf *2);
                 pos.x += roadPos - setting.roadWidthHalf;
                 pos.z += setting.roadWidthHalf;
+                roadObjectsGenerator.GenerateRoadObjects(road, false, (roadLength - setting.roadWidthHalf * 2));
             }
             else // on Z axis
             {
                 pos.z += roadPos;
-                road.position = pos;
+                road.transform.position = pos;
                 road.transform.localScale = new Vector3(setting.roadWidthHalf *2, setting.roadHeightHalf * 2, roadLength);
                 pos.z += roadPos - setting.roadWidthHalf;
                 pos.x += setting.roadWidthHalf;
+                roadObjectsGenerator.GenerateRoadObjects(road, true, (roadLength - setting.roadWidthHalf * 2));
             }
             roads.RemoveAt(0);
             roads.Add(road);

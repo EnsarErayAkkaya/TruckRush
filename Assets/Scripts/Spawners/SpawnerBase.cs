@@ -11,9 +11,10 @@ namespace Project.Spawners
             this.setting = setting;
         }
 
-        public virtual void Spawn(Vector3 spawnLine, bool onZAxis)
+        public virtual GameObject Spawn(Vector3 spawnLine, bool onZAxis)
         {
             Debug.Log("Spawner Not Implemented");
+            return null;
         }
     }
 }

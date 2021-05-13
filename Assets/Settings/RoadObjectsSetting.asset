@@ -13,26 +13,40 @@ MonoBehaviour:
   m_Name: RoadObjectsSetting
   m_EditorClassIdentifier: 
   roadObjectCounts:
+  - length: 10
+    min: 0
+    max: 1
   - length: 25
     min: 0
-    max: 3
-  - length: 50
-    min: 0
     max: 4
-  - length: 75
+  - length: 50
     min: 1
-    max: 5
-  - length: 90
-    min: 2
     max: 6
+  - length: 75
+    min: 2
+    max: 7
+  - length: 90
+    min: 3
+    max: 7
   barricadeSetting:
     barricadePrefab: {fileID: 1348773960222542354, guid: 05e75df258bb9ee49afb724a2a8e1bb3, type: 3}
     barricadeWidthHalf: 1.5
-    barricadeLengthHalf: 1
+    barricadeLengthHalf: 2
     barricadeHeightHalf: 0.75
   coinSetting:
-    CoinPrefab: {fileID: 0}
-    coinsLengthHalf: 0
-    barricadeHeightHalf: 0
+    CoinPrefab: {fileID: 6118065314425493049, guid: b25db8e58bcd7684eaf43b06d9ea8459, type: 3}
+    coinsLengthHalf: 3
+    coinsHeightHalf: 0.75
+  gasStationSetting:
+    gasStationPrefab: {fileID: 5899554912452911173, guid: 07cdb754e100fef4a9e868c8af301c91, type: 3}
+    gasStationSpawnAfter: 5
+    minGasStationFrequency: 8
+    minGasValue: 10
+    maxGasValue: 80
+    minRequiredCoinValue: 10
+    maxRequiredCoinValue: 43
+    gasStationLengthHalf: 20
+    gasStationHeightHalf: 0
+    gasStationWidthHalf: 12.5
   minEmptySpaceLength: 2
-  maxEmptySpaceLength: 8
+  maxEmptySpaceLength: 10

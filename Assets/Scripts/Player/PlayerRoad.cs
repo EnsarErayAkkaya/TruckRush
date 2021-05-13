@@ -19,7 +19,7 @@ namespace Project.Player
                 if(hit.transform != null && hit.transform != road)
                 {
                     road = hit.transform;
-                    ProceduralRoadGenerator.instance.TruckRoadIndexSet(road);
+                    ProceduralRoadGenerator.instance.TruckRoadIndexSet(road.GetComponent<Road.Road>());
                 }
             }
         }

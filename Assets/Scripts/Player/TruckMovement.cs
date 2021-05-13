@@ -12,14 +12,19 @@ namespace Project.Player
 
         private Vector3 moveVector;
         private Vector3 rotateVector;
+        private bool canMove = true;
+        public bool CanMove => canMove;
         private void Update()
         {
             SetMoveVector();
         }
         private void FixedUpdate()
         {
-            rb.MovePosition(rb.position + moveVector * Time.fixedDeltaTime);
-            Rotate();
+            if (canMove)
+            {
+                rb.MovePosition(rb.position + moveVector * Time.fixedDeltaTime);
+                Rotate();
+            }
         }
         private void SetMoveVector()
         {
@@ -31,5 +36,8 @@ namespace Project.Player
             Quaternion deltaRotation = Quaternion.Euler(rotateVector * rotationSpeed * Time.fixedDeltaTime);
             rb.MoveRotation(rb.rotation * deltaRotation);
         }
+        public void Move() => canMove = true;
+        public void Stop() => canMove = false;
+
     }
 }

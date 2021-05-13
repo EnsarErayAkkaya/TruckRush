@@ -8,6 +8,6 @@ namespace Project.Settings.Collectables
     {
         public GameObject CoinPrefab;
         public float coinsLengthHalf;
-        public float barricadeHeightHalf;
+        public float coinsHeightHalf;
     }
 }

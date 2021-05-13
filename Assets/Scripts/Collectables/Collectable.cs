@@ -9,25 +9,17 @@ namespace Project.Collectables
 {
     public class Collectable : MonoBehaviour
     {
-        [SerializeField] private int value;
-        [SerializeField] private Animator animator;
-        [SerializeField] private string collisionAnimationName;
-
+        [SerializeField] protected int value;
         private bool destroyed;
 
-        public virtual float OnPlayerCollided()
+        public virtual int OnPlayerCollided()
         {
             if (!destroyed)
             {
                 destroyed = true;
-                PlayCollisionAnimation();
                 return value;
             }
             return -1;
-        }
-        protected void PlayCollisionAnimation()
-        {
-            animator.SetTrigger(collisionAnimationName);
         }
     }
 }

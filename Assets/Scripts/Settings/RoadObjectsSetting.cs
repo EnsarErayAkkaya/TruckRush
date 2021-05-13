@@ -19,6 +19,8 @@ namespace Project.Settings
         public BarricadeSetting barricadeSetting;
         [Header("Coin Setting")]
         public CoinSetting coinSetting;
+        [Header("Gas Station Setting")]
+        public GasStationSetting gasStationSetting;
         [Header("Empty Space Setting")]
         public float minEmptySpaceLength;
         public float maxEmptySpaceLength;

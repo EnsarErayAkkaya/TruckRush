@@ -12,12 +12,13 @@ namespace Project.Road
         public float StartingPoint => startingPoint;
         public float EndingPoint => endingPoint;
         public float RoadLength => endingPoint - startingPoint;
+        public float RemainingLength => endingPoint - currentPoint;
 
         private float currentPoint;
 
         public RoadSegmentation()
         {
-            currentPoint = startingPoint;
+            currentPoint = 0;
         }
         public void Set(float startingPoint, float endingPoint)
         {

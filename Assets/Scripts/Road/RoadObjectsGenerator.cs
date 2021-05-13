@@ -9,11 +9,11 @@ namespace Project.Road
     {
         [SerializeField] private RoadObjectsSetting setting;
 
+        #region Spawners
         private BarricadeSpawner barricadeSpawner;
         private CoinSpawner coinSpawner;
-
-        private float roadWidthHalf;
-        private float roadHeightHalf;
+        private GasStationSpawner gasStationSpawner;
+        #endregion
 
         private float startingPoint;
         private float endingPoint;
@@ -21,45 +21,53 @@ namespace Project.Road
         private RoadSegmentation roadSegmentation;
         private Vector3 spawnPos;
         private bool onZAxis;
-        private void Start()
+        private int lastGasStationCreatedIndex;
+        private void Awake()
         {
             roadSegmentation = new RoadSegmentation();
             barricadeSpawner = new BarricadeSpawner(setting.barricadeSetting);
             coinSpawner = new CoinSpawner(setting.coinSetting);
-
+            gasStationSpawner = new GasStationSpawner(setting.gasStationSetting);
         }
 
-        public void GenerateRoadObjects(Transform road, bool onZAxis, float roadLength)
+        public void GenerateRoadObjects(Road road, bool onZAxis, float roadLength)
         {
             this.onZAxis = onZAxis;
             if (onZAxis)
             {
-                startingPoint = road.position.z - roadLength / 2;
-                endingPoint = road.position.z + roadLength / 2;
-                spawnPos = new Vector3(road.position.x, 0, startingPoint);
+                startingPoint = road.transform.position.z - roadLength / 2;
+                endingPoint = road.transform.position.z + roadLength / 2;
+                spawnPos = new Vector3(road.transform.position.x, 0, startingPoint);
             }
             else
             {
-                startingPoint = road.position.x - roadLength / 2;
-                endingPoint = road.position.x + roadLength / 2;
-                spawnPos = new Vector3(startingPoint, 0, road.position.z);
+                startingPoint = road.transform.position.x - roadLength / 2;
+                endingPoint = road.transform.position.x + roadLength / 2;
+                spawnPos = new Vector3(startingPoint, 0, road.transform.position.z);
             }
 
             roadSegmentation.Set(startingPoint, endingPoint);
 
             int objectCount = ObjectCountAccordingToRoadLength(roadLength);
-            Debug.Log("Road Object Count: " + objectCount + " for road " + road.name);
 
             for (int i = 0; i < objectCount; i++)
             {
-                int code = Random.Range(0, 2);
+                int code = Random.Range(0, 3);
+                GameObject g;
                 switch (code)
                 {
                     case 0:
-                        GenerateBarricade();
+                         g = GenerateBarricade();
+                        if (g != null)
+                            road.AddObject(g);
                         break;
                     case 1:
                         GenerateEmptySpace();
+                        break;
+                    case 2:
+                        g = GenerateCollectable();
+                        if (g != null)
+                            road.AddObject(g);
                         break;
                     default:
                         break;
@@ -67,17 +75,15 @@ namespace Project.Road
             }
         }
 
-        private void GenerateBarricade()
+        private GameObject GenerateBarricade()
         {
-            Debug.Log("Generating Barricade");
             if(onZAxis)
             {
                 float value = roadSegmentation.AllocateSpace(setting.barricadeSetting.barricadeLengthHalf * 2);
                 if (value != -1)
                 {
-                    Debug.Log("Space Allocated");
                     spawnPos.z = value;
-                    barricadeSpawner.Spawn(spawnPos, onZAxis);
+                    return barricadeSpawner.Spawn(spawnPos, onZAxis);
                 }
             }
             else
@@ -85,26 +91,97 @@ namespace Project.Road
                 float value = roadSegmentation.AllocateSpace(setting.barricadeSetting.barricadeLengthHalf * 2);
                 if (value != -1)
                 {
-                    Debug.Log("Space Allocated");
                     spawnPos.x = value;
-                    barricadeSpawner.Spawn(spawnPos, onZAxis);
+                    return barricadeSpawner.Spawn(spawnPos, onZAxis);
                 }
+            }
+            return null;
+        }
+        private GameObject GenerateCollectable()
+        {
+            int s = Random.Range(0, 2);
+            switch (s)
+            {
+                case 0:
+                    return GenerateCoin();
+                case 1:
+                    return GenerateGasStation();
+                default:
+                    return null;
+            }
+        }
+        private GameObject GenerateCriterlessCollectable()
+        {
+            return GenerateCoin(); // right now we only have coins
+        }
+        private GameObject GenerateCoin()
+        {
+            if (onZAxis)
+            {
+                float value = roadSegmentation.AllocateSpace(setting.coinSetting.coinsLengthHalf * 2);
+                if (value != -1)
+                {
+                    spawnPos.z = value;
+                    return coinSpawner.Spawn(spawnPos, onZAxis);
+                }
+            }
+            else
+            {
+                float value = roadSegmentation.AllocateSpace(setting.coinSetting.coinsLengthHalf * 2);
+                if (value != -1)
+                {
+                    spawnPos.x = value;
+                    return coinSpawner.Spawn(spawnPos, onZAxis);
+                }
+            }
+            return null;
+        }
+        private GameObject GenerateGasStation()
+        {
+            if (ProceduralRoadGenerator.instance.RoadIndex >= setting.gasStationSetting.gasStationSpawnAfter
+                && roadSegmentation.RoadLength >= setting.gasStationSetting.gasStationLengthHalf * 3
+                && roadSegmentation.RemainingLength >= setting.gasStationSetting.gasStationLengthHalf * 2
+                && lastGasStationCreatedIndex + setting.gasStationSetting.minGasStationFrequency <= ProceduralRoadGenerator.instance.RoadIndex)
+            {
+                if (onZAxis)
+                {
+                    float value = roadSegmentation.AllocateSpace(setting.gasStationSetting.gasStationLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.z = value;
+                        return gasStationSpawner.Spawn(spawnPos, onZAxis);
+                    }
+                }
+                else
+                {
+                    float value = roadSegmentation.AllocateSpace(setting.gasStationSetting.gasStationLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.x = value;
+                        return gasStationSpawner.Spawn(spawnPos, onZAxis);
+                    }
+                }
+                return null;
+            }
+            else
+            {
+                return GenerateCriterlessCollectable();
             }
         }
         private void GenerateEmptySpace()
         {
-            Debug.Log("Generating EmptySpace");
             float length = Random.Range(setting.minEmptySpaceLength, setting.maxEmptySpaceLength);
             roadSegmentation.AllocateSpace(length);
         }
         private int ObjectCountAccordingToRoadLength(float length)
         {
-            foreach (var item in setting.roadObjectCounts)
+            RoadObjectsSetting.RoadLengthMinMax[] minMaxes = setting.roadObjectCounts;
+            for (int i = 0; i < minMaxes.Length-1; i++)
             {
-                if (item.length < length)
-                    return Random.Range(item.min, item.max);
+                if (minMaxes[i].length <= length && minMaxes[i+1].length > length)
+                    return Random.Range(minMaxes[i].min, minMaxes[i].max);
             }
-            return 1;
+            return Random.Range(minMaxes[minMaxes.Length-1].min, minMaxes[minMaxes.Length - 1].max);
         }
     }
 }
