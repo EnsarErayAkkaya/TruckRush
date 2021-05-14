@@ -5,7 +5,7 @@ namespace Project.UI.Player
 {
     public class PlayerUI : MonoBehaviour
     {
-        [SerializeField] private Image fuelImage;
+        [SerializeField] private Slider fuelSlider;
 
         /// <summary>
         /// Set fuel fill amount. fuel value is 0-1
@@ -13,7 +13,7 @@ namespace Project.UI.Player
         /// <param name="fuel"></param>
         public void SetFuelFillImage(float fuel)
         {
-            fuelImage.fillAmount = fuel;
+            fuelSlider.value = fuel;
         }
     }
 }

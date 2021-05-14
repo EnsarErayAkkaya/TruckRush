@@ -1,4 +1,5 @@
-﻿using Project.UI.Player;
+﻿using Project.GameSystems;
+using Project.UI.Player;
 using UnityEngine;
 
 namespace Project.Player
@@ -20,14 +21,18 @@ namespace Project.Player
 
         private void Update()
         {
-            if (fuel > 0 && fuel <= maxFuel) 
-            { 
-                fuel -= fuelLoseSpeed * Time.deltaTime;
-                playerUI.SetFuelFillImage(fuel / maxFuel);
-            }
-            else if(truckMovement.CanMove)
+            if (truckMovement.CanMove)
             {
-                truckMovement.Stop();
+                if (fuel > 0 && fuel <= maxFuel)
+                {
+                    fuel -= fuelLoseSpeed * Time.deltaTime;
+                    playerUI.SetFuelFillImage(fuel / maxFuel);
+                }
+                else
+                {
+                    truckMovement.Stop();
+                    GameManager.instance.PlayerLost();
+                }
             }
         }
         public void GainFuel(int value)

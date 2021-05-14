@@ -1,4 +1,5 @@
-﻿using Project.Road;
+﻿using Project.Obstacles;
+using Project.Road;
 using Project.Settings.Obstacles;
 using UnityEngine;
 
@@ -26,6 +27,7 @@ namespace Project.Spawners
             }
             pos.y += setting.barricadeHeightHalf;
             return Object.Instantiate(setting.barricadePrefab, pos, q);
+            
         }
     }
 }

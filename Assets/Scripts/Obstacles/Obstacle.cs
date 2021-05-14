@@ -6,9 +6,9 @@ namespace Project.Obstacles
 {
     public class Obstacle : MonoBehaviour
     {
-        [SerializeField] private float damage;
-        [SerializeField] private Animator animator;
-        [SerializeField] private string collisionAnimationName;
+        [SerializeField] protected float damage;
+        [SerializeField] protected Animator animator;
+        [SerializeField] protected string collisionAnimationName;
 
         private bool destroyed;
 
@@ -22,7 +22,7 @@ namespace Project.Obstacles
             }
             return -1;
         }
-        protected void PlayCollisionAnimation()
+        protected virtual void PlayCollisionAnimation()
         {
             animator.SetTrigger(collisionAnimationName);
         }

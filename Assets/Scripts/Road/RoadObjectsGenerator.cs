@@ -143,6 +143,7 @@ namespace Project.Road
                 && roadSegmentation.RemainingLength >= setting.gasStationSetting.gasStationLengthHalf * 2
                 && lastGasStationCreatedIndex + setting.gasStationSetting.minGasStationFrequency <= ProceduralRoadGenerator.instance.RoadIndex)
             {
+                lastGasStationCreatedIndex = ProceduralRoadGenerator.instance.RoadIndex;
                 if (onZAxis)
                 {
                     float value = roadSegmentation.AllocateSpace(setting.gasStationSetting.gasStationLengthHalf * 2);

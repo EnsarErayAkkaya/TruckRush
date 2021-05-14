@@ -17,7 +17,6 @@ namespace Project.Collectables
 
         public override int OnPlayerCollided()
         {
-            Debug.Log("Gas Station Collided");
             if (CoinManager.instance.IsCoinSufficient(requiredCoin))
             {
                 CoinManager.instance.LoseCoin(requiredCoin);

@@ -8,6 +8,7 @@ namespace Project.Player
     public class PlayerHealth : MonoBehaviour
     {
         [SerializeField] private float health;
+        [SerializeField] private TruckMovement truckMovement;
         public float Health
         {
             get => health;
@@ -15,8 +16,10 @@ namespace Project.Player
             {
                 health = value;
                 if (health <= 0)
-                    GameManager.instance.OnPlayerFailure();
-
+                {
+                    truckMovement.Stop();
+                    GameManager.instance.PlayerLost();
+                }
             }
         }
     }
