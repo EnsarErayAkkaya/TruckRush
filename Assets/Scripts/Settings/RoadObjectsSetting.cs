@@ -21,6 +21,8 @@ namespace Project.Settings
         public CoinSetting coinSetting;
         [Header("Gas Station Setting")]
         public GasStationSetting gasStationSetting;
+        [Header("Power Up Setting")]
+        public PowerUpSetting powerUpSetting;
         [Header("Empty Space Setting")]
         public float minEmptySpaceLength;
         public float maxEmptySpaceLength;

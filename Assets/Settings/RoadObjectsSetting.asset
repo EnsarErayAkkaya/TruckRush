@@ -40,7 +40,7 @@ MonoBehaviour:
   gasStationSetting:
     gasStationPrefab: {fileID: 5899554912452911173, guid: 07cdb754e100fef4a9e868c8af301c91, type: 3}
     gasStationSpawnAfter: 5
-    minGasStationFrequency: 6
+    minGasStationFrequency: 5
     minGasValue: 10
     maxGasValue: 80
     minRequiredCoinValue: 10
@@ -48,5 +48,9 @@ MonoBehaviour:
     gasStationLengthHalf: 20
     gasStationHeightHalf: 0
     gasStationWidthHalf: 12.5
+  powerUpSetting:
+    PowerUpPrefab: {fileID: 2248883568626830247, guid: ba872552b7098964cbb5d4bde6f7e7d1, type: 3}
+    powerUpLengthHalf: 1
+    powerUpHeightHalf: 1
   minEmptySpaceLength: 2
   maxEmptySpaceLength: 10

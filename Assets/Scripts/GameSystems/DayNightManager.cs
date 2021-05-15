@@ -6,7 +6,6 @@ namespace Project.GameSystems
     {
         [SerializeField, Range(0.0f, 1.0f)] private float time;
         [SerializeField] private float fullDayLength;
-        [SerializeField] private float startTime = 0.4f;
 
         [SerializeField] private Vector3 noon;
         private float timeRate;
@@ -25,15 +24,28 @@ namespace Project.GameSystems
         [SerializeField] private AnimationCurve lightningIntensityMultiplier;
         [SerializeField] private AnimationCurve reflectionsIntensityMultiplier;
 
+        [SerializeField] private float openLightsThreshold; // if sun intensity lower than threshold open lights
+
         private bool flow;
         private int day;
+        private bool isLightOpened;
 
+        public delegate void OnDayNightStateChange();
+        public OnDayNightStateChange onDay;
+        public OnDayNightStateChange onNight;
+
+        public static DayNightManager instance;
+        private void Awake()
+        {
+            instance = this;
+        }
         private void Start()
         {
             timeRate = 1.0f / fullDayLength;
-            time = startTime;
+            time = Random.Range(.0f, 1.0f); // set start day time randomly
             SetSunAndMoon();
             GameManager.instance.onGameStart += StartFlow;
+            GameManager.instance.onPlayerLost += StopFlow;
         }
 
         private void Update()
@@ -49,9 +61,7 @@ namespace Project.GameSystems
                     day++;
                 }
                 SetSunAndMoon();
-                
             }
-
         }
         private void SetSunAndMoon()
         {
@@ -66,6 +76,17 @@ namespace Project.GameSystems
             // change colors
             sun.color = sunColor.Evaluate(time);
             moon.color = moonColor.Evaluate(time);
+
+            if (sun.intensity < openLightsThreshold && !isLightOpened)
+            {
+                isLightOpened = true;
+                onNight?.Invoke();
+            }
+            else if (sun.intensity >= openLightsThreshold && isLightOpened)
+            {
+                isLightOpened = false;
+                onDay?.Invoke();
+            }
 
             // enable / disable the sun
             if (sun.intensity == 0 && sun.gameObject.activeInHierarchy)
@@ -84,6 +105,7 @@ namespace Project.GameSystems
             RenderSettings.reflectionIntensity = reflectionsIntensityMultiplier.Evaluate(time);
         }
         private void StartFlow() => flow = true;
+        private void StopFlow() => flow = false;
 
     }
 }

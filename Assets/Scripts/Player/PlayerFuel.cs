@@ -12,6 +12,8 @@ namespace Project.Player
         [SerializeField] private float fuel;
         private float maxFuel;
         [SerializeField] private float fuelLoseSpeed;
+
+        private bool useFuel = true;
         private void Start()
         {
             maxFuel = fuel;
@@ -21,7 +23,7 @@ namespace Project.Player
 
         private void Update()
         {
-            if (truckMovement.CanMove)
+            if (truckMovement.CanMove && useFuel)
             {
                 if (fuel > 0 && fuel <= maxFuel)
                 {
@@ -41,5 +43,7 @@ namespace Project.Player
             if (fuel > maxFuel)
                 fuel = maxFuel;
         }
+        public void DontUseFuel() => useFuel = false;
+        public void UseFuel() => useFuel = true;
     }
 }

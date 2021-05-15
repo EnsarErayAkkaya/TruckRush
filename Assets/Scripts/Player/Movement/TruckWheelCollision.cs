@@ -8,28 +8,32 @@ namespace Project.Player
         [SerializeField] private TruckMovement truckMovement;
         [SerializeField] private LayerMask roadLayer;
 
+        [Header("Wheel Transforms")]
         [SerializeField] private Transform frontRightWheel;
         [SerializeField] private Transform frontLeftWheel;
         [SerializeField] private Transform backRightWheel;
         [SerializeField] private Transform backLeftWheel;
-        
+        [Header("Wheel Collision particles")]
         [SerializeField] private ParticleSystem frontRightWheelParticle;
         [SerializeField] private ParticleSystem frontLeftWheelParticle;
         [SerializeField] private ParticleSystem backRightWheelParticle;
         [SerializeField] private ParticleSystem backLeftWheelParticle;
 
+        // they are 1 wheel safe, 0 if it is not
         private byte front_right = 1;
         private byte front_left = 1;
         private byte back_right = 1;
         private byte back_left = 1;
 
         [SerializeField] private float maxTwoWheelOutTime;
+
         private float wheelOutStartTime;
         private bool twoWheelOut;
+        private bool checkWheelCollision = true;
 
         private void Update()
         {
-            if (truckMovement.CanMove)
+            if (truckMovement.CanMove && checkWheelCollision)
             {
                 int sum = front_right + front_left + back_right + back_left;
 
@@ -60,7 +64,7 @@ namespace Project.Player
 
         private void FixedUpdate()
         {
-            if (truckMovement.CanMove)
+            if (truckMovement.CanMove && checkWheelCollision)
             {
                 RaycastHit hit;
 
@@ -121,5 +125,7 @@ namespace Project.Player
                 }
             }
         }
+        public void DontCheckCollision() => checkWheelCollision = false;
+        public void CheckCollision() => checkWheelCollision = true;
     }
 }

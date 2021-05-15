@@ -13,6 +13,7 @@ namespace Project.Road
         private BarricadeSpawner barricadeSpawner;
         private CoinSpawner coinSpawner;
         private GasStationSpawner gasStationSpawner;
+        private PowerUpSpawner powerUpSpawner;
         #endregion
 
         private float startingPoint;
@@ -25,9 +26,11 @@ namespace Project.Road
         private void Awake()
         {
             roadSegmentation = new RoadSegmentation();
+
             barricadeSpawner = new BarricadeSpawner(setting.barricadeSetting);
             coinSpawner = new CoinSpawner(setting.coinSetting);
             gasStationSpawner = new GasStationSpawner(setting.gasStationSetting);
+            powerUpSpawner = new PowerUpSpawner(setting.powerUpSetting);
         }
 
         public void GenerateRoadObjects(Road road, bool onZAxis, float roadLength)
@@ -99,20 +102,31 @@ namespace Project.Road
         }
         private GameObject GenerateCollectable()
         {
-            int s = Random.Range(0, 2);
+            int s = Random.Range(0, 3);
             switch (s)
             {
                 case 0:
                     return GenerateCoin();
                 case 1:
                     return GenerateGasStation();
+                case 2:
+                    return GeneratePowerUp();
                 default:
                     return null;
             }
         }
         private GameObject GenerateCriterlessCollectable()
         {
-            return GenerateCoin(); // right now we only have coins
+            int s = Random.Range(0, 2);
+            switch (s)
+            {
+                case 0:
+                    return GenerateCoin();
+                case 1:
+                    return GeneratePowerUp();
+                default:
+                    return null;
+            }
         }
         private GameObject GenerateCoin()
         {
@@ -132,6 +146,28 @@ namespace Project.Road
                 {
                     spawnPos.x = value;
                     return coinSpawner.Spawn(spawnPos, onZAxis);
+                }
+            }
+            return null;
+        }
+        private GameObject GeneratePowerUp()
+        {
+            if (onZAxis)
+            {
+                float value = roadSegmentation.AllocateSpace(setting.powerUpSetting.powerUpLengthHalf * 2);
+                if (value != -1)
+                {
+                    spawnPos.z = value;
+                    return powerUpSpawner.Spawn(spawnPos, onZAxis);
+                }
+            }
+            else
+            {
+                float value = roadSegmentation.AllocateSpace(setting.powerUpSetting.powerUpLengthHalf * 2);
+                if (value != -1)
+                {
+                    spawnPos.x = value;
+                    return powerUpSpawner.Spawn(spawnPos, onZAxis);
                 }
             }
             return null;

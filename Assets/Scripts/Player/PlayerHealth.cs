@@ -9,12 +9,14 @@ namespace Project.Player
     {
         [SerializeField] private float health;
         [SerializeField] private TruckMovement truckMovement;
+        private bool canGetDamage = true;
         public float Health
         {
             get => health;
             set
             {
-                health = value;
+                if(canGetDamage)
+                    health = value;
                 if (health <= 0)
                 {
                     truckMovement.Stop();
@@ -22,5 +24,7 @@ namespace Project.Player
                 }
             }
         }
+        public void CantGetDamage() => canGetDamage = false;
+        public void CanGetDamage() => canGetDamage = true;
     }
 }

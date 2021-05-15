@@ -14,30 +14,39 @@ namespace Project.Player
         [SerializeField] private PlayerFuel playerFuel;
         private void OnTriggerEnter(Collider collision)
         {
-            if(collision.CompareTag(obstacleTag))
+            if (collision.CompareTag(obstacleTag))
             {
                 Obstacle o = collision.transform.GetComponent<Obstacle>();
                 float damage = o.OnPlayerCollided();
                 if (damage != -1)
                     playerHealth.Health -= damage;
             }
-            else if (collision.CompareTag(coinTag))
+            else 
             {
-                Coin c = collision.transform.GetComponent<Coin>();
-                int value = c.OnPlayerCollided();
-                if (value != -1)
+                Collectable c = collision.transform.GetComponent<Collectable>();
+                if(c != null)
                 {
-                    CoinManager.instance.GainCoin(value);
-                    Destroy(c.gameObject);
-                }
-            }
-            else if (collision.CompareTag(gasStationTag))
-            {
-                GasStation g = collision.transform.GetComponent<GasStation>();
-                int value = g.OnPlayerCollided();
-                if (value != -1)
-                {
-                    playerFuel.GainFuel(value);
+                    if (collision.CompareTag(coinTag))
+                    {
+                        int value = c.OnPlayerCollided();
+                        if (value != -1)
+                        {
+                            CoinManager.instance.GainCoin(value);
+                            Destroy(c.gameObject);
+                        }
+                    }
+                    else if (collision.CompareTag(gasStationTag))
+                    {
+                        int value = c.OnPlayerCollided();
+                        if (value != -1)
+                        {
+                            playerFuel.GainFuel(value);
+                        }
+                    }
+                    else
+                    {
+                        c.OnPlayerCollided();
+                    }
                 }
             }
         }

@@ -34,7 +34,10 @@ namespace Project.Player
         private void SetMoveVector()
         {
             moveVector = transform.forward * mainSpeed;
+            moveVector.y = 0;
             rotateVector.y = swerveInput.swerveVector.x;
+            rotateVector.x = 0;
+            rotateVector.z = 0;
         }
         private void Rotate()
         {
