@@ -1,4 +1,5 @@
-﻿using Project.Settings;
+﻿using Project.GameSystems;
+using Project.Settings;
 using Project.Spawners;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Project.Road
         private CoinSpawner coinSpawner;
         private GasStationSpawner gasStationSpawner;
         private PowerUpSpawner powerUpSpawner;
+        private DistanceMilestoneSpawner distanceMilestoneSpawner;
         #endregion
 
         private float startingPoint;
@@ -24,6 +26,8 @@ namespace Project.Road
         private bool onZAxis;
         private int lastGasStationCreatedIndex;
         private int lastPowerUpCreatedIndex;
+        private float totalLength;
+        private float nextMileStone;
         private void Awake()
         {
             roadSegmentation = new RoadSegmentation();
@@ -32,6 +36,8 @@ namespace Project.Road
             coinSpawner = new CoinSpawner(setting.coinSetting);
             gasStationSpawner = new GasStationSpawner(setting.gasStationSetting);
             powerUpSpawner = new PowerUpSpawner(setting.powerUpSetting);
+            distanceMilestoneSpawner = new DistanceMilestoneSpawner(setting.distanceMilestoneSetting);
+            nextMileStone = ScoreManager.instance.GetNextMilestone();
         }
 
         public void GenerateRoadObjects(Road road, bool onZAxis, float roadLength)
@@ -49,6 +55,22 @@ namespace Project.Road
                 endingPoint = road.transform.position.x + roadLength / 2;
                 spawnPos = new Vector3(startingPoint, 0, road.transform.position.z);
             }
+
+            // Generate Milestone
+            if (totalLength + roadLength >= nextMileStone)
+            {
+                // spawn milestone object
+                Vector3 pos = spawnPos;
+                if (onZAxis)
+                    pos.z += nextMileStone - totalLength;
+                else
+                    pos.x += nextMileStone - totalLength;
+
+                distanceMilestoneSpawner.Set(nextMileStone);
+                road.AddObject(distanceMilestoneSpawner.Spawn(pos, onZAxis));
+                nextMileStone = ScoreManager.instance.GetNextMilestone();
+            }
+            totalLength += roadLength;
 
             roadSegmentation.Set(startingPoint, endingPoint);
 

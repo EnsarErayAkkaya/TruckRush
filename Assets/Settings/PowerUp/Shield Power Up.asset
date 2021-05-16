@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: shield
   icon: {fileID: -2696906206462422838, guid: 84356da12a8249c499e709f4475f15d8, type: 3}
-  duration: 5
+  duration: 10

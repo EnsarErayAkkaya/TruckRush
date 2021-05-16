@@ -23,6 +23,8 @@ namespace Project.Settings
         public GasStationSetting gasStationSetting;
         [Header("Power Up Setting")]
         public PowerUpSetting powerUpSetting;
+        [Header("Distance Milestone Setting")]
+        public DistanceMilestoneSetting distanceMilestoneSetting;
         [Header("Empty Space Setting")]
         public float minEmptySpaceLength;
         public float maxEmptySpaceLength;

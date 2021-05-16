@@ -7,30 +7,44 @@ namespace Project.PowerUps
     [CreateAssetMenu(fileName = "Fly Power Up", menuName = "PowerUp/Fly")]
     public class PowerUp_Fly : PowerUp
     {
-        public float duration;
         public float extraSpeed;
+        private TruckWheelCollision wheelCollision;
+        private PlayerFuel playerFuel;
+        private TruckAnimation truckAnimation;
 
-        public override IEnumerator Use(TruckMovement truck)
+        public override void OnStart(TruckMovement truck)
         {
-            Debug.Log("Flying");
+            Debug.Log("Flying Start");
             Transform parent =  truck.transform.parent;
 
-            TruckWheelCollision wheelCollision = truck.GetComponent<TruckWheelCollision>();
-            PlayerFuel playerFuel = parent.GetComponent<PlayerFuel>();
-            TruckAnimation truckAnimation = parent.GetComponent<TruckAnimation>();
+            if(wheelCollision == null)
+                wheelCollision = truck.GetComponent<TruckWheelCollision>();
+            if(playerFuel == null)
+                playerFuel = parent.GetComponent<PlayerFuel>();
+            if (truckAnimation == null)
+                truckAnimation = parent.GetComponent<TruckAnimation>();
 
             truckAnimation.OpenWings();
 
             wheelCollision.DontCheckCollision();
             playerFuel.DontUseFuel();
             truck.IncreaseSpeed(extraSpeed);
+        }
+        public override void OnEnd(TruckMovement truck)
+        {
+            Transform parent = truck.transform.parent;
 
-            yield return new WaitForSeconds(duration);
+            if (wheelCollision == null)
+                wheelCollision = truck.GetComponent<TruckWheelCollision>();
+            if (playerFuel == null)
+                playerFuel = parent.GetComponent<PlayerFuel>();
+            if (truckAnimation == null)
+                truckAnimation = parent.GetComponent<TruckAnimation>();
 
+            truck.DecreaseSpeed(extraSpeed);
+            truckAnimation.CloseWings();
             wheelCollision.CheckCollision();
             playerFuel.UseFuel();
-            truckAnimation.CloseWings();
-            truck.DecreaseSpeed(extraSpeed);
             Debug.Log("Flying End");
         }
     }

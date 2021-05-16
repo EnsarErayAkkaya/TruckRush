@@ -7,24 +7,34 @@ namespace Project.PowerUps
     [CreateAssetMenu(fileName = "Shield Power Up", menuName = "PowerUp/Shield")]
     public class PowerUp_Shield : PowerUp
     {
-        public float duration;
-        public override IEnumerator Use(TruckMovement truck)
+        PlayerHealth playerHealth;
+        TruckAnimation truckAnimation;
+
+        public override void OnStart(TruckMovement truck)
         {
             Debug.Log("Shield");
             Transform parent = truck.transform.parent;
 
-            PlayerHealth playerHealth = parent.GetComponent<PlayerHealth>();
-            TruckAnimation truckAnimation = parent.GetComponent<TruckAnimation>();
+            if(playerHealth == null)
+                playerHealth = parent.GetComponent<PlayerHealth>();
+            if(truckAnimation == null)
+                truckAnimation = parent.GetComponent<TruckAnimation>();
 
             truckAnimation.OpenShields();
-
             playerHealth.CantGetDamage();
-
-            yield return new WaitForSeconds(duration);
+        }
+        public override void OnEnd(TruckMovement truck)
+        {
+            Transform parent = truck.transform.parent;
+            if (playerHealth == null)
+                playerHealth = parent.GetComponent<PlayerHealth>();
+            if (truckAnimation == null)
+                truckAnimation = parent.GetComponent<TruckAnimation>();
 
             truckAnimation.CloseShields();
-            Debug.Log("Shield End");
             playerHealth.CanGetDamage();
+
+            Debug.Log("Shield End");
         }
     }
 }

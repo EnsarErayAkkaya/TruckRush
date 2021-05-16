@@ -15,19 +15,19 @@ MonoBehaviour:
   roadObjectCounts:
   - length: 10
     min: 0
-    max: 1
+    max: 2
   - length: 25
     min: 0
-    max: 4
+    max: 5
   - length: 50
     min: 1
-    max: 6
+    max: 7
   - length: 75
     min: 2
-    max: 7
+    max: 8
   - length: 90
     min: 3
-    max: 7
+    max: 9
   barricadeSetting:
     barricadePrefab: {fileID: 1348773960222542354, guid: 05e75df258bb9ee49afb724a2a8e1bb3, type: 3}
     barricadeWidthHalf: 1.5
@@ -53,6 +53,9 @@ MonoBehaviour:
     powerUpLengthHalf: 2
     powerUpHeightHalf: 1
     minPowerUpFrequency: 3
-    powerUpsWillStartFrom: 3
+    powerUpsWillStartFrom: 2
+  distanceMilestoneSetting:
+    milestonePrefab: {fileID: 5110322330555485358, guid: aced366c2abae8d4cae086955a164b1b, type: 3}
+    milestoneHeightHalf: 0.05
   minEmptySpaceLength: 2
   maxEmptySpaceLength: 10

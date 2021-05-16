@@ -9,15 +9,15 @@ namespace Project.Collectables
 {
     public class PowerUp : Collectable
     {
-        private string powerUpName;
+        private PowerUps.PowerUp powerUp;
         public void Start()
         {
-            powerUpName = PowerUpManager.instance.GetRandomPowerUp();
+            powerUp = PowerUpManager.instance.GetRandomPowerUp();
         }
 
         public override int OnPlayerCollided()
         {
-            PowerUpManager.instance.UsePowerUp(powerUpName);
+            PowerUpManager.instance.SelectPowerUp(powerUp);
             Destroy(gameObject);
             return -1;
         }

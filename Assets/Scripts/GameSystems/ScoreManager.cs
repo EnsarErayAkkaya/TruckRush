@@ -8,41 +8,25 @@ namespace Project.GameSystems
 {
     public class ScoreManager : MonoBehaviour
     {
-        private float distanceTravelled; // trucks current traveld distance
         [SerializeField] private float[] distanceMilestones;
 
         [SerializeField] private TruckMovement truck;
+        private int current = 0;
 
-        private Vector3 startingPos;
-        private WaitForSeconds w = new WaitForSeconds(1); // just didnt want to create every time
-        private int lastMileStoneIndex;
-        private void Start()
+        private int achievedMilestoneCount = 0;
+
+        public static ScoreManager instance;
+        private void Awake()
         {
-            GameManager.instance.onGameStart += StartScoring;   
-        }
-        private void StartScoring()
-        {
-            startingPos = truck.transform.position;
-            StartCoroutine(CheckDistance());
+            instance = this;
         }
 
-        private IEnumerator CheckDistance()
+        public float GetNextMilestone()
         {
-            while(truck.CanMove)
-            {
-                distanceTravelled = Vector3.Distance(truck.transform.position, startingPos);
-                CheckMilestones();
-                yield return w;
-            }
+            float a = distanceMilestones[current];
+            current++;
+            return a;
         }
-
-        private void CheckMilestones()
-        {
-            if(distanceMilestones.Length > lastMileStoneIndex && distanceMilestones[lastMileStoneIndex] <= distanceTravelled)
-            {
-                Notification.instance.AddNotification("You Travelled for " + distanceMilestones[lastMileStoneIndex] + " Meter");
-                lastMileStoneIndex++;
-            } 
-        }
+        public void AchieveMilestone() => achievedMilestoneCount++;
     }
 }

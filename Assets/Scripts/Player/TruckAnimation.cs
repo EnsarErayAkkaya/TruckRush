@@ -8,21 +8,36 @@ namespace Project.Player
     {
         [SerializeField] private Animator animator;
 
+        [SerializeField] private List<GameObject> wings;
+        [SerializeField] private List<GameObject> shields;
+
         public void OpenWings()
         {
-            animator.SetTrigger("OpenWings");
+            foreach (GameObject item in wings)
+            {
+                item.SetActive(true);
+            }
         }
         public void CloseWings()
         {
-            animator.SetTrigger("CloseWings");
+            foreach (GameObject item in wings)
+            {
+                item.SetActive(false);
+            }
         }
         public void OpenShields()
         {
-            animator.SetTrigger("OpenShields");
+            foreach (GameObject item in shields)
+            {
+                item.SetActive(true);
+            }
         }
         public void CloseShields()
         {
-            animator.SetTrigger("CloseShields");
+            foreach (GameObject item in shields)
+            {
+                item.SetActive(false);
+            }
         }
     }
 }

@@ -1,25 +1,40 @@
 using Project.GameSystems;
+using Project.PowerUps;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Project.UI
 {
     public class PowerUpUI : MonoBehaviour
     {
-        [SerializeField] private Transform powerUpsParent;
-        [SerializeField] private GameObject powerUpUIPrefab;
+        [SerializeField] private Slider powerUpDurationSlider;
+        [SerializeField] private GameObject powerUpButton;
+        [SerializeField] private Image powerUpButtonImage;
 
-        private void Start()
+        public void UsePowerUp()
         {
-            CreatePowerUps();
+            powerUpButton.SetActive(false);
+            PowerUpManager.instance.UsePowerUp();
+        }
+        public void SetPowerUpButton(PowerUp p)
+        {
+            powerUpButtonImage.sprite = p.icon;
+            powerUpButton.SetActive(true);
         }
 
-        private void CreatePowerUps()
+        public void OnPowerUpUsed(PowerUp p)
         {
-            /*oreach (var item in PowerUpManager.instance.PowerUps)
-            {
-                Instantiate(powerUpUIPrefab, powerUpsParent).GetComponent<PowerUpItem>().Set(item);
-            }*/
+            Notification.instance.AddNotification(p.name);
+            powerUpDurationSlider.gameObject.SetActive(true);
+        }
+        public void SetSliderValue(float t)
+        {
+            powerUpDurationSlider.value = t;
+        }
+        public void OnPowerUpEnd()
+        {
+            powerUpDurationSlider.gameObject.SetActive(false);
         }
     }
 }
