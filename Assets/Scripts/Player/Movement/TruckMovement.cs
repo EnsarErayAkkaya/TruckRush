@@ -46,6 +46,8 @@ namespace Project.Player
         }
         public void Move() => canMove = true;
         public void Stop() => canMove = false;
+        public void IncreaseSpeed(float value) => mainSpeed += value;
+        public void DecreaseSpeed(float value) => mainSpeed -= value;
 
     }
 }

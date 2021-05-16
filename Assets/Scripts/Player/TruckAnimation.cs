@@ -16,5 +16,13 @@ namespace Project.Player
         {
             animator.SetTrigger("CloseWings");
         }
+        public void OpenShields()
+        {
+            animator.SetTrigger("OpenShields");
+        }
+        public void CloseShields()
+        {
+            animator.SetTrigger("CloseShields");
+        }
     }
 }

@@ -23,18 +23,21 @@ namespace Project.Player
 
         private void Update()
         {
-            if (truckMovement.CanMove && useFuel)
+            if (truckMovement.CanMove)
             {
-                if (fuel > 0 && fuel <= maxFuel)
+                if (useFuel)
                 {
-                    fuel -= fuelLoseSpeed * Time.deltaTime;
-                    playerUI.SetFuelFillImage(fuel / maxFuel);
+                    if (fuel > 0 && fuel <= maxFuel)
+                    {
+                        fuel -= fuelLoseSpeed * Time.deltaTime;
+                    }
+                    else
+                    {
+                        truckMovement.Stop();
+                        GameManager.instance.PlayerLost();
+                    }
                 }
-                else
-                {
-                    truckMovement.Stop();
-                    GameManager.instance.PlayerLost();
-                }
+                playerUI.SetFuelFillImage(fuel / maxFuel);
             }
         }
         public void GainFuel(int value)

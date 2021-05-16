@@ -14,11 +14,15 @@ namespace Project.PowerUps
             Transform parent = truck.transform.parent;
 
             PlayerHealth playerHealth = parent.GetComponent<PlayerHealth>();
+            TruckAnimation truckAnimation = parent.GetComponent<TruckAnimation>();
+
+            truckAnimation.OpenShields();
 
             playerHealth.CantGetDamage();
 
             yield return new WaitForSeconds(duration);
 
+            truckAnimation.CloseShields();
             Debug.Log("Shield End");
             playerHealth.CanGetDamage();
         }

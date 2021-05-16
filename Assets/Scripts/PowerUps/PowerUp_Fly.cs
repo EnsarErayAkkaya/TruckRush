@@ -8,6 +8,8 @@ namespace Project.PowerUps
     public class PowerUp_Fly : PowerUp
     {
         public float duration;
+        public float extraSpeed;
+
         public override IEnumerator Use(TruckMovement truck)
         {
             Debug.Log("Flying");
@@ -21,12 +23,14 @@ namespace Project.PowerUps
 
             wheelCollision.DontCheckCollision();
             playerFuel.DontUseFuel();
+            truck.IncreaseSpeed(extraSpeed);
 
             yield return new WaitForSeconds(duration);
 
             wheelCollision.CheckCollision();
             playerFuel.UseFuel();
             truckAnimation.CloseWings();
+            truck.DecreaseSpeed(extraSpeed);
             Debug.Log("Flying End");
         }
     }
