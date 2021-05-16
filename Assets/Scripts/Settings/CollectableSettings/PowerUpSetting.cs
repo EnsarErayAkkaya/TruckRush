@@ -9,5 +9,7 @@ namespace Project.Settings.Collectables
         public GameObject PowerUpPrefab;
         public float powerUpLengthHalf;
         public float powerUpHeightHalf;
+        public int minPowerUpFrequency;
+        public int powerUpsWillStartFrom;
     }
 }

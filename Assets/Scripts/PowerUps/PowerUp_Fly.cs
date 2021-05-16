@@ -15,6 +15,9 @@ namespace Project.PowerUps
 
             TruckWheelCollision wheelCollision = truck.GetComponent<TruckWheelCollision>();
             PlayerFuel playerFuel = parent.GetComponent<PlayerFuel>();
+            TruckAnimation truckAnimation = parent.GetComponent<TruckAnimation>();
+
+            truckAnimation.OpenWings();
 
             wheelCollision.DontCheckCollision();
             playerFuel.DontUseFuel();
@@ -23,6 +26,7 @@ namespace Project.PowerUps
 
             wheelCollision.CheckCollision();
             playerFuel.UseFuel();
+            truckAnimation.CloseWings();
             Debug.Log("Flying End");
         }
     }

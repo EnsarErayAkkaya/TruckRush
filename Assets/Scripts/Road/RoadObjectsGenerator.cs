@@ -23,6 +23,7 @@ namespace Project.Road
         private Vector3 spawnPos;
         private bool onZAxis;
         private int lastGasStationCreatedIndex;
+        private int lastPowerUpCreatedIndex;
         private void Awake()
         {
             roadSegmentation = new RoadSegmentation();
@@ -117,16 +118,9 @@ namespace Project.Road
         }
         private GameObject GenerateCriterlessCollectable()
         {
-            int s = Random.Range(0, 2);
-            switch (s)
-            {
-                case 0:
-                    return GenerateCoin();
-                case 1:
-                    return GeneratePowerUp();
-                default:
-                    return null;
-            }
+
+            return GenerateCoin();
+
         }
         private GameObject GenerateCoin()
         {
@@ -152,22 +146,27 @@ namespace Project.Road
         }
         private GameObject GeneratePowerUp()
         {
-            if (onZAxis)
+            if (ProceduralRoadGenerator.instance.RoadIndex >= setting.powerUpSetting.powerUpsWillStartFrom
+                && lastPowerUpCreatedIndex + setting.powerUpSetting.minPowerUpFrequency <= ProceduralRoadGenerator.instance.RoadIndex)
             {
-                float value = roadSegmentation.AllocateSpace(setting.powerUpSetting.powerUpLengthHalf * 2);
-                if (value != -1)
+                lastPowerUpCreatedIndex = ProceduralRoadGenerator.instance.RoadIndex;
+                if (onZAxis)
                 {
-                    spawnPos.z = value;
-                    return powerUpSpawner.Spawn(spawnPos, onZAxis);
+                    float value = roadSegmentation.AllocateSpace(setting.powerUpSetting.powerUpLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.z = value;
+                        return powerUpSpawner.Spawn(spawnPos, onZAxis);
+                    }
                 }
-            }
-            else
-            {
-                float value = roadSegmentation.AllocateSpace(setting.powerUpSetting.powerUpLengthHalf * 2);
-                if (value != -1)
+                else
                 {
-                    spawnPos.x = value;
-                    return powerUpSpawner.Spawn(spawnPos, onZAxis);
+                    float value = roadSegmentation.AllocateSpace(setting.powerUpSetting.powerUpLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.x = value;
+                        return powerUpSpawner.Spawn(spawnPos, onZAxis);
+                    }
                 }
             }
             return null;

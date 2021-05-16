@@ -125,7 +125,22 @@ namespace Project.Player
                 }
             }
         }
-        public void DontCheckCollision() => checkWheelCollision = false;
+        public void DontCheckCollision()
+        {
+            if (frontRightWheelParticle.isPlaying)
+                frontRightWheelParticle.Stop();
+
+            if (frontLeftWheelParticle.isPlaying)
+                frontLeftWheelParticle.Stop();
+
+            if (backRightWheelParticle.isPlaying)
+                backRightWheelParticle.Stop();
+
+            if (backLeftWheelParticle.isPlaying)
+                backLeftWheelParticle.Stop();
+
+            checkWheelCollision = false;
+        }
         public void CheckCollision() => checkWheelCollision = true;
     }
 }

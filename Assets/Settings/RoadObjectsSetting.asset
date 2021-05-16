@@ -52,5 +52,7 @@ MonoBehaviour:
     PowerUpPrefab: {fileID: 2248883568626830247, guid: ba872552b7098964cbb5d4bde6f7e7d1, type: 3}
     powerUpLengthHalf: 1
     powerUpHeightHalf: 1
+    minPowerUpFrequency: 3
+    powerUpsWillStartFrom: 3
   minEmptySpaceLength: 2
   maxEmptySpaceLength: 10
