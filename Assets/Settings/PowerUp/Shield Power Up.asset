@@ -9,9 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca7306564d90c554ba65d9570a9e8b91, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d40bb384b705134d8af1a96ff3cfa3c, type: 3}
   m_Name: Shield Power Up
   m_EditorClassIdentifier: 
   name: shield
-  icon: {fileID: -2696906206462422838, guid: 84356da12a8249c499e709f4475f15d8, type: 3}
+  icon: {fileID: -1900836405344694469, guid: 84356da12a8249c499e709f4475f15d8, type: 3}
   duration: 10
+  requiredActivationCredit: 800
+  powerUpLevelDatas:
+  - powerUpLevelData:
+    - 11
+    requiredLevelCredit: 400
+  - powerUpLevelData:
+    - 12
+    requiredLevelCredit: 500

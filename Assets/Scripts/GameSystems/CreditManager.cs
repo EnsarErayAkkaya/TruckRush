@@ -7,23 +7,31 @@ namespace Project.GameSystems
     public class CreditManager : MonoBehaviour
     {
         private int creditCount;
-        public int Credit => creditCount;
+        [SerializeField] private int powerUpCreditMultiplier;
+        [SerializeField] private int milestoneCreditMultiplier;
 
         #region event
         public delegate void OnCreditChange(int value);
         public OnCreditChange onCreditChange;
         #endregion
+        public int Credit => creditCount;
+        public int PowerUpCreditMultiplier => powerUpCreditMultiplier;
+        public int MilestoneCreditMultiplier => milestoneCreditMultiplier;
 
         public static CreditManager instance;
 
         private void Awake()
         {
-            if(instance != this)
+            if (instance != null && instance != this)
             {
-                Destroy(gameObject);
-                return;
+                Destroy(this.gameObject);
             }
-            instance = this;
+            else
+            {
+                instance = this;
+            }
+            creditCount = 1000;
+            onCreditChange?.Invoke(creditCount);
             DontDestroyOnLoad(this);
         }
 
@@ -37,6 +45,12 @@ namespace Project.GameSystems
             creditCount -= value;
             onCreditChange?.Invoke(creditCount);
         }
-        public bool IsCreditSufficient(int requiredValue) => creditCount >= requiredValue;
+        public bool IsCreditSufficient(int requiredValue) 
+        {
+            if (creditCount >= requiredValue)
+                return true;
+            Debug.Log("UnSefficient Money");
+            return false;
+        }
     }
 }

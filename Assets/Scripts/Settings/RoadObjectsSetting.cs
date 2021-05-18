@@ -17,6 +17,8 @@ namespace Project.Settings
         }
         [Header("Barricade Setting")]
         public BarricadeSetting barricadeSetting;
+        [Header("Big Barricade Setting")]
+        public BigBarricadeSetting bigBarricadeSetting;
         [Header("Coin Setting")]
         public CoinSetting coinSetting;
         [Header("Gas Station Setting")]

@@ -47,5 +47,9 @@ namespace Project.PowerUps
             playerFuel.UseFuel();
             Debug.Log("Flying End");
         }
+        public override void SetLevel(int lvl)
+        {
+            duration = powerUpLevelDatas[lvl].powerUpLevelData[0];
+        }
     }
 }

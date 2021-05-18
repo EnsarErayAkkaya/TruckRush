@@ -17,9 +17,19 @@ namespace Project.Player
             if (collision.CompareTag(obstacleTag))
             {
                 Obstacle o = collision.transform.GetComponent<Obstacle>();
-                float damage = o.OnPlayerCollided();
-                if (damage != -1)
-                    playerHealth.Health -= damage;
+                if (o != null)
+                {
+                    float damage = o.OnPlayerCollided();
+                    if (damage != -1)
+                        playerHealth.Health -= damage;
+                }
+                else
+                {
+                    o = collision.transform.parent.GetComponent<Obstacle>();
+                    float damage = o.OnPlayerCollided();
+                    if (damage != -1)
+                        playerHealth.Health -= damage;
+                }
             }
             else 
             {

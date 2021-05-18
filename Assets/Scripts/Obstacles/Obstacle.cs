@@ -24,7 +24,8 @@ namespace Project.Obstacles
         }
         protected virtual void PlayCollisionAnimation()
         {
-            animator.SetTrigger(collisionAnimationName);
+            if(animator != null)
+                animator.SetTrigger(collisionAnimationName);
         }
     }
 }

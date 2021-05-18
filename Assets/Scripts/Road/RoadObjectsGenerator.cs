@@ -12,6 +12,7 @@ namespace Project.Road
 
         #region Spawners
         private BarricadeSpawner barricadeSpawner;
+        private BigBarricadeSpawner bigBarricadeSpawner;
         private CoinSpawner coinSpawner;
         private GasStationSpawner gasStationSpawner;
         private PowerUpSpawner powerUpSpawner;
@@ -26,13 +27,16 @@ namespace Project.Road
         private bool onZAxis;
         private int lastGasStationCreatedIndex;
         private int lastPowerUpCreatedIndex;
-        private float totalLength;
+        private int lastBigBarricadeSpawnIndex;
         private float nextMileStone;
+        
+        public float totalLength;
         private void Awake()
         {
             roadSegmentation = new RoadSegmentation();
 
             barricadeSpawner = new BarricadeSpawner(setting.barricadeSetting);
+            bigBarricadeSpawner = new BigBarricadeSpawner(setting.bigBarricadeSetting);
             coinSpawner = new CoinSpawner(setting.coinSetting);
             gasStationSpawner = new GasStationSpawner(setting.gasStationSetting);
             powerUpSpawner = new PowerUpSpawner(setting.powerUpSetting);
@@ -43,16 +47,17 @@ namespace Project.Road
         public void GenerateRoadObjects(Road road, bool onZAxis, float roadLength)
         {
             this.onZAxis = onZAxis;
+            float roadWidthHalf = ProceduralRoadGenerator.instance.Setting.roadWidthHalf;
             if (onZAxis)
             {
-                startingPoint = road.transform.position.z - roadLength / 2;
-                endingPoint = road.transform.position.z + roadLength / 2;
+                startingPoint = road.transform.position.z - roadLength / 2 - roadWidthHalf;
+                endingPoint = road.transform.position.z + roadLength / 2 - roadWidthHalf;
                 spawnPos = new Vector3(road.transform.position.x, 0, startingPoint);
             }
             else
             {
-                startingPoint = road.transform.position.x - roadLength / 2;
-                endingPoint = road.transform.position.x + roadLength / 2;
+                startingPoint = road.transform.position.x - roadLength / 2 - roadWidthHalf;
+                endingPoint = road.transform.position.x + roadLength / 2 - roadWidthHalf;
                 spawnPos = new Vector3(startingPoint, 0, road.transform.position.z);
             }
 
@@ -83,7 +88,7 @@ namespace Project.Road
                 switch (code)
                 {
                     case 0:
-                         g = GenerateBarricade();
+                         g = GenerateObstacle();
                         if (g != null)
                             road.AddObject(g);
                         break;
@@ -98,6 +103,19 @@ namespace Project.Road
                     default:
                         break;
                 }
+            }
+        }
+        private GameObject GenerateObstacle()
+        {
+            int s = Random.Range(0, 2);
+            switch (s)
+            {
+                case 0:
+                    return GenerateBarricade();
+                case 1:
+                    return GenerateBigBarricade();
+                default:
+                    return null;
             }
         }
 
@@ -123,6 +141,31 @@ namespace Project.Road
             }
             return null;
         }
+        private GameObject GenerateBigBarricade()
+        {
+            if (ProceduralRoadGenerator.instance.RoadIndex >= setting.bigBarricadeSetting.bigBarricadeSpawnAfter)
+            {
+                if (onZAxis)
+                {
+                    float value = roadSegmentation.AllocateSpace(setting.bigBarricadeSetting.bigBarricadeLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.z = value;
+                        return bigBarricadeSpawner.Spawn(spawnPos, onZAxis);
+                    }
+                }
+                else
+                {
+                    float value = roadSegmentation.AllocateSpace(setting.bigBarricadeSetting.bigBarricadeLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.x = value;
+                        return bigBarricadeSpawner.Spawn(spawnPos, onZAxis);
+                    }
+                }
+            }
+            return null;
+        }
         private GameObject GenerateCollectable()
         {
             int s = Random.Range(0, 3);
@@ -140,9 +183,7 @@ namespace Project.Road
         }
         private GameObject GenerateCriterlessCollectable()
         {
-
             return GenerateCoin();
-
         }
         private GameObject GenerateCoin()
         {

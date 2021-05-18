@@ -10,7 +10,7 @@ namespace Project.Collectables
     public class Collectable : MonoBehaviour
     {
         [SerializeField] protected int value;
-        private bool destroyed;
+        protected bool destroyed;
 
         public virtual int OnPlayerCollided()
         {

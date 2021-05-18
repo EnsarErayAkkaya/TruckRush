@@ -12,6 +12,21 @@ namespace Project.UI
         [SerializeField] private GameObject powerUpButton;
         [SerializeField] private Image powerUpButtonImage;
 
+        private void Start()
+        {
+            PowerUpManager.instance.onPowerUpUsed += OnPowerUpUsed;
+            PowerUpManager.instance.onPowerUpChange += SetPowerUpButton;
+            PowerUpManager.instance.onRemainingTimeChange += SetSliderValue;
+            PowerUpManager.instance.onPowerUpEnd += OnPowerUpEnd;
+        }
+        private void OnDestroy()
+        {
+            PowerUpManager.instance.onPowerUpUsed -= OnPowerUpUsed;
+            PowerUpManager.instance.onPowerUpChange -= SetPowerUpButton;
+            PowerUpManager.instance.onRemainingTimeChange -= SetSliderValue;
+            PowerUpManager.instance.onPowerUpEnd -= OnPowerUpEnd;
+        }
+
         public void UsePowerUp()
         {
             powerUpButton.SetActive(false);

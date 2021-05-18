@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Project.Road;
+using Project.GameSystems;
 
 namespace Project.Player
 {
@@ -9,6 +10,11 @@ namespace Project.Player
         [SerializeField] private LayerMask roadLayer;
 
         private Transform road;
+        private Vector3 pos;
+        private void Start()
+        {
+            GameManager.instance.onPlayerLost += OnGameEnded;
+        }
 
         private void FixedUpdate()
         {
@@ -19,9 +25,14 @@ namespace Project.Player
                 if(hit.transform != null && hit.transform != road)
                 {
                     road = hit.transform;
+                    pos = hit.transform.position;
                     ProceduralRoadGenerator.instance.TruckRoadIndexSet(road.GetComponent<Road.Road>());
                 }
             }
+        }
+        private void OnGameEnded()
+        {
+            ScoreManager.instance.SetDistanceTravelled(road.GetComponent<Road.Road>().GetTotalLength(pos));
         }
     }
 }

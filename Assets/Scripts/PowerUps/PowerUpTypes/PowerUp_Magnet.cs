@@ -18,13 +18,16 @@ namespace Project.PowerUps
         }
         public override void OnEveryFrame(TruckMovement truck)
         {
-            Vector3 pos = truck.transform.position;
-            Collider[] colliders = Physics.OverlapSphere(pos, radius, coinLayer);
-            foreach (Collider item in colliders)
+            if(truck != null)
             {
-                if (item.CompareTag(coinTag))
+                Vector3 pos = truck.transform.position;
+                Collider[] colliders = Physics.OverlapSphere(pos, radius, coinLayer);
+                foreach (Collider item in colliders)
                 {
-                    item.transform.position += (pos - item.transform.position).normalized * pullSpeed;
+                    if (item.CompareTag(coinTag))
+                    {
+                        item.transform.position += (pos - item.transform.position).normalized * pullSpeed;
+                    }
                 }
             }
         }

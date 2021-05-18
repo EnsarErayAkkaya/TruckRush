@@ -1,6 +1,5 @@
 using Project.Player;
-using Project.UI;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Project.PowerUps
@@ -10,6 +9,13 @@ namespace Project.PowerUps
         public new string name;
         public Sprite icon;
         public float duration;
+        public int requiredActivationCredit;
+        public List<PowerUpLevelData> powerUpLevelDatas;
+
+        public virtual void SetLevel(int lvl)
+        {
+            Debug.Log("implement");
+        }
 
         public virtual void OnEnd(TruckMovement truck)
         {

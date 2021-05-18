@@ -15,9 +15,19 @@ MonoBehaviour:
   name: magnet
   icon: {fileID: -5113899963740867716, guid: 84356da12a8249c499e709f4475f15d8, type: 3}
   duration: 10
+  requiredActivationCredit: 600
+  powerUpLevelDatas:
+  - powerUpLevelData:
+    - 11
+    - 8
+    requiredLevelCredit: 200
+  - powerUpLevelData:
+    - 11
+    - 9
+    requiredLevelCredit: 200
   radius: 8
   coinLayer:
     serializedVersion: 2
     m_Bits: 512
   coinTag: Coin
-  pullSpeed: 2
+  pullSpeed: 1

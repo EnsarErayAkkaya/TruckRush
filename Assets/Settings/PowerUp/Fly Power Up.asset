@@ -9,10 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1343b1e17a4174343b399c76bc8af6b1, type: 3}
+  m_Script: {fileID: 11500000, guid: f7713161048a8804190a7bba0193833e, type: 3}
   m_Name: Fly Power Up
   m_EditorClassIdentifier: 
   name: fly
-  icon: {fileID: -267758133915289989, guid: 84356da12a8249c499e709f4475f15d8, type: 3}
+  icon: {fileID: 611016873201127891, guid: 84356da12a8249c499e709f4475f15d8, type: 3}
   duration: 10
+  requiredActivationCredit: 500
+  powerUpLevelDatas:
+  - powerUpLevelData:
+    - 11
+    requiredLevelCredit: 100
+  - powerUpLevelData:
+    - 12
+    requiredLevelCredit: 300
   extraSpeed: 10

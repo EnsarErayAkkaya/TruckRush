@@ -33,6 +33,12 @@ MonoBehaviour:
     barricadeWidthHalf: 1.5
     barricadeLengthHalf: 2
     barricadeHeightHalf: 0.75
+  bigBarricadeSetting:
+    bigBarricadePrefab: {fileID: 8659664659905055480, guid: 3ae30be02673be24dbce8cbfe2a6cb58, type: 3}
+    bigBarricadeSpawnAfter: 0
+    bigBarricadeLengthHalf: 6
+    bigBarricadeHeightHalf: 0
+    bigBarricadeWidthHalf: 9
   coinSetting:
     CoinPrefab: {fileID: 6118065314425493049, guid: b25db8e58bcd7684eaf43b06d9ea8459, type: 3}
     coinsLengthHalf: 3
@@ -40,7 +46,7 @@ MonoBehaviour:
   gasStationSetting:
     gasStationPrefab: {fileID: 5899554912452911173, guid: 07cdb754e100fef4a9e868c8af301c91, type: 3}
     gasStationSpawnAfter: 5
-    minGasStationFrequency: 4
+    minGasStationFrequency: 3
     minGasValue: 10
     maxGasValue: 80
     minRequiredCoinValue: 10
@@ -52,8 +58,8 @@ MonoBehaviour:
     PowerUpPrefab: {fileID: 2248883568626830247, guid: ba872552b7098964cbb5d4bde6f7e7d1, type: 3}
     powerUpLengthHalf: 2
     powerUpHeightHalf: 1
-    minPowerUpFrequency: 3
-    powerUpsWillStartFrom: 2
+    minPowerUpFrequency: 4
+    powerUpsWillStartFrom: 3
   distanceMilestoneSetting:
     milestonePrefab: {fileID: 5110322330555485358, guid: aced366c2abae8d4cae086955a164b1b, type: 3}
     milestoneHeightHalf: 0.05

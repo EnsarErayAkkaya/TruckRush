@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RoadSetting
   m_EditorClassIdentifier: 
   Road: {fileID: 3233234882194792976, guid: 35f0ed58117676041a82789d9bc2b4dc, type: 3}
-  existingRoadObjectCount: 12
+  existingRoadObjectCount: 10
   minRoadLength: 25
   maxRoadLength: 100
   roadWidthHalf: 8

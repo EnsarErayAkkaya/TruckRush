@@ -13,7 +13,11 @@ namespace Project.Collectables
         }
         public override int OnPlayerCollided()
         {
-            ScoreManager.instance.AchieveMilestone();
+            if (!destroyed)
+            {
+                destroyed = true;
+                ScoreManager.instance.AchieveMilestone();
+            }
             return -1;
         }
     }
