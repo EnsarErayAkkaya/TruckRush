@@ -13,19 +13,41 @@ MonoBehaviour:
   m_Name: Magnet Power Up
   m_EditorClassIdentifier: 
   name: magnet
-  icon: {fileID: -5113899963740867716, guid: 84356da12a8249c499e709f4475f15d8, type: 3}
-  duration: 10
+  icon: {fileID: 21300000, guid: 8689c643de00e5b41983cc3e191eb7f8, type: 3}
   requiredActivationCredit: 600
   powerUpLevelDatas:
   - powerUpLevelData:
     - 11
     - 8
-    requiredLevelCredit: 200
+    requiredLevelCredit: 1000
   - powerUpLevelData:
     - 11
     - 9
-    requiredLevelCredit: 200
-  radius: 8
+    requiredLevelCredit: 2000
+  - powerUpLevelData:
+    - 12
+    - 9
+    requiredLevelCredit: 3000
+  - powerUpLevelData:
+    - 13
+    - 9
+    requiredLevelCredit: 4000
+  - powerUpLevelData:
+    - 14
+    - 10
+    requiredLevelCredit: 5000
+  - powerUpLevelData:
+    - 14
+    - 11
+    requiredLevelCredit: 6000
+  - powerUpLevelData:
+    - 15
+    - 11
+    requiredLevelCredit: 7000
+  - powerUpLevelData:
+    - 16
+    - 11
+    requiredLevelCredit: 8000
   coinLayer:
     serializedVersion: 2
     m_Bits: 512

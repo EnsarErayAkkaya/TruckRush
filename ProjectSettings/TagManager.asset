@@ -19,9 +19,9 @@ TagManager:
   - Obstacle
   - Player
   - Collectable
-  - 
-  - 
-  - 
+  - LightVolume
+  - Fraction
+  - CollidableOffRoad
   - 
   - 
   - 

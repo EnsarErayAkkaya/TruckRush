@@ -36,7 +36,7 @@ namespace Project.Road
             if (currentPoint + requestedLength <= endingPoint)
             {
                 currentPoint += requestedLength;
-                return currentPoint;
+                return currentPoint - requestedLength / 2;
             }
             return -1;
         }

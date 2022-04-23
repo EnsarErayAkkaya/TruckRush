@@ -1,4 +1,5 @@
 ﻿using Project.GameSystems;
+using Project.UI;
 using Project.UI.Player;
 using UnityEngine;
 
@@ -7,16 +8,19 @@ namespace Project.Player
     [RequireComponent(typeof(PlayerUI))]
     public class PlayerFuel : MonoBehaviour
     {
-        [SerializeField] private PlayerUI playerUI;
         [SerializeField] private TruckMovement truckMovement;
         [SerializeField] private float fuel;
-        private float maxFuel;
         [SerializeField] private float fuelLoseSpeed;
-
+        
+        private GameUI gameUI;
+        private float maxFuel;
         private bool useFuel = true;
+
         private void Start()
         {
+            gameUI = FindObjectOfType<GameUI>();
             maxFuel = fuel;
+            GameManager.instance.onResurrect += OnResurrect;
         }
 
         public float SetFuel(float fuel) => this.fuel = fuel;
@@ -37,7 +41,7 @@ namespace Project.Player
                         GameManager.instance.PlayerLost();
                     }
                 }
-                playerUI.SetFuelFillImage(fuel / maxFuel);
+                gameUI.SetFuelFillImage(fuel / maxFuel);
             }
         }
         public void GainFuel(int value)
@@ -48,5 +52,10 @@ namespace Project.Player
         }
         public void DontUseFuel() => useFuel = false;
         public void UseFuel() => useFuel = true;
+
+        public void OnResurrect()
+        {
+            GainFuel((int)maxFuel);
+        }
     }
 }

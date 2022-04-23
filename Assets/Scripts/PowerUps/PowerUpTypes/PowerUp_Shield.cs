@@ -12,7 +12,6 @@ namespace Project.PowerUps
 
         public override void OnStart(TruckMovement truck)
         {
-            Debug.Log("Shield");
             Transform parent = truck.transform.parent;
 
             if(playerHealth == null)
@@ -34,7 +33,10 @@ namespace Project.PowerUps
             truckAnimation.CloseShields();
             playerHealth.CanGetDamage();
 
-            Debug.Log("Shield End");
+        }
+        public override void SetLevel(int lvl)
+        {
+            _duration = powerUpLevelDatas[lvl].powerUpLevelData[0];
         }
     }
 }

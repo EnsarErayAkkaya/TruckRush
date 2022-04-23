@@ -9,6 +9,7 @@ namespace Project.Settings.Collectables
         public GameObject gasStationPrefab;
         public int gasStationSpawnAfter;
         public int minGasStationFrequency;
+        public int maxGasStationFrequency;
         public int minGasValue;
         public int maxGasValue;
         public int minRequiredCoinValue;

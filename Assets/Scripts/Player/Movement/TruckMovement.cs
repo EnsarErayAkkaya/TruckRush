@@ -1,4 +1,5 @@
 using Project.GameSystems;
+using Project.UI;
 using System.Collections;
 using UnityEngine;
 
@@ -8,16 +9,23 @@ namespace Project.Player
     {
         [SerializeField] private SwerveInput swerveInput;
         [SerializeField] private Rigidbody rb;
-        [SerializeField] private float  mainSpeed;
+        [SerializeField] private float basicSpeed;
         [SerializeField] private float rotationSpeed;
+
 
         private Vector3 moveVector;
         private Vector3 rotateVector;
         private bool canMove;
+        private GameUI gameUI;
+        private float mainSpeed;
+        private float speedMofifiers;
+
         public bool CanMove => canMove;
         private void Start()
         {
-            GameManager.instance.preGameStart += Move;
+            GameManager.instance.onGameStart += Move;
+            gameUI = FindObjectOfType<GameUI>();
+            SetMainSpeed();
         }
         private void Update()
         {
@@ -33,11 +41,16 @@ namespace Project.Player
         }
         private void SetMoveVector()
         {
-            moveVector = transform.forward * mainSpeed;
-            moveVector.y = 0;
-            rotateVector.y = swerveInput.swerveVector.x;
-            rotateVector.x = 0;
-            rotateVector.z = 0;
+            if (canMove)
+            {
+                moveVector = transform.forward * mainSpeed;
+                moveVector.y = 0;
+                rotateVector.y = swerveInput.swerveVector.x;
+                rotateVector.x = 0;
+                rotateVector.z = 0;
+                AudioManager.instance.ChangeTruckMovementSoundPitch(rotateVector.y);
+                gameUI.RotateSteeringWheel(rotateVector.y);
+            }
         }
         private void Rotate()
         {
@@ -46,8 +59,22 @@ namespace Project.Player
         }
         public void Move() => canMove = true;
         public void Stop() => canMove = false;
-        public void IncreaseSpeed(float value) => mainSpeed += value;
-        public void DecreaseSpeed(float value) => mainSpeed -= value;
+        public void IncreaseSpeed(float value) 
+        {
+            speedMofifiers += value;
+            SetMainSpeed();
+        }
+        public void DecreaseSpeed(float value)
+        {
+            speedMofifiers -= value;
+            SetMainSpeed();
+        }
+        public void SetSpeed(float value)
+        {
+            basicSpeed = value;
+            SetMainSpeed();
+        }
+        private void SetMainSpeed() => mainSpeed = basicSpeed + speedMofifiers;
 
     }
 }

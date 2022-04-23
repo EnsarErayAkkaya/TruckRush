@@ -38,6 +38,7 @@ namespace Project.GameSystems
 
         public List<PowerUp> AllPowerUps => allPowerUps;
         public List<PowerUp> ActivatedPowerUps => activatedPowerUps;
+        public Dictionary<string, int> PowerUpLevels => powerUpLevels;
 
         public static PowerUpManager instance;
         private void Awake()
@@ -50,17 +51,15 @@ namespace Project.GameSystems
             {
                 instance = this;
             }
-            powerUpLevels = new Dictionary<string, int>();
-            FillDictionary();
             DontDestroyOnLoad(this);
+            GetSavedData();
         }
-        public void UsePowerUp()
+        private void Start()
         {
-            if (truck == null)
-                truck = FindObjectOfType<TruckMovement>();
-
-            ScoreManager.instance.UsedPowerUpCount += 1;
-
+            SetActivatedPowerUpsLevel();
+        }
+        private void StopUsingPowerUp()
+        {
             if (powerUpStartingTime + powerUpLength >= Time.time)
             {
                 StopAllCoroutines();
@@ -70,24 +69,46 @@ namespace Project.GameSystems
                     lastActivePowerUp.OnEnd(truck);
                 }
             }
+        }
+        public void UsePowerUp()
+        {
+            if (truck == null)
+                truck = FindObjectOfType<TruckMovement>();
+
+            ScoreManager.instance.UsedPowerUpCount += 1;
+
+            StopUsingPowerUp();
+
             StartCoroutine(EnumeratePowerUp(selected)); // use 
         }
+        public void UsePowerUp(string powerUpName)
+        {
+            if (truck == null)
+                truck = FindObjectOfType<TruckMovement>();
+
+            ScoreManager.instance.UsedPowerUpCount += 1;
+
+            StopUsingPowerUp();
+
+            StartCoroutine(EnumeratePowerUp(allPowerUps.Find(p => p.name == powerUpName))); // use 
+        }
+
         private IEnumerator EnumeratePowerUp(PowerUp p)
         {
             lastActivePowerUp = p;
             powerUpStartingTime = Time.time;
-            powerUpLength = p.duration;
+            powerUpLength = p.Duration;
             powerUpEndedNormaly = false;
 
             p.OnStart(truck);
             onPowerUpUsed?.Invoke(p);
 
-            float t = p.duration;
+            float t = p.Duration;
             while (t > 0)
             {
                 t -= Time.deltaTime;
                 p.OnEveryFrame(truck);
-                onRemainingTimeChange?.Invoke(t / p.duration);
+                onRemainingTimeChange?.Invoke(t / p.Duration);
                 yield return null;
             }
 
@@ -95,7 +116,8 @@ namespace Project.GameSystems
             powerUpEndedNormaly = true;
             onPowerUpEnd?.Invoke();
         }
-        public PowerUp GetRandomPowerUp() => activatedPowerUps[Random.Range(0, activatedPowerUps.Count)];
+        public PowerUp GetRandomPowerUp() => activatedPowerUps.Count > 0 ? 
+            activatedPowerUps[Random.Range(0, activatedPowerUps.Count)] : null;
         public void SelectPowerUp(PowerUp p)
         {
             onPowerUpChange?.Invoke(p);
@@ -110,11 +132,20 @@ namespace Project.GameSystems
                 activatedPowerUps.Find(s => s.name == item.Key).SetLevel(item.Value);
             }
         }
-        public void FillDictionary()
+        public void GetSavedData()
         {
-            foreach (PowerUp item in activatedPowerUps)
+            powerUpLevels = new Dictionary<string, int>();
+            for (int i = 0; i < DataManager.instance.savedData.powerUpLevelNames.Count; i++)
             {
-                powerUpLevels.Add(item.name, 0);
+                string key = DataManager.instance.savedData.powerUpLevelNames[i];
+                int lvl = DataManager.instance.savedData.powerUpLevels[i];
+                powerUpLevels.Add(key, lvl);
+            }
+            activatedPowerUps = new List<PowerUp>();
+
+            foreach (string item in powerUpLevels.Keys)
+            {
+                activatedPowerUps.Add(allPowerUps.Find(s => s.name == item));
             }
         }
         public int IncreasePowerUpLevel(string name)
@@ -125,6 +156,24 @@ namespace Project.GameSystems
                 powerUpLevels.Add(name, 0);
 
             activatedPowerUps.Find(s => s.name == name).SetLevel(powerUpLevels[name]);
+
+            /// Saving Power Up
+            List<int> levels = new List<int>();
+            foreach (int lvl in powerUpLevels.Values)
+            {
+                levels.Add(lvl);
+            }
+            List<string> names = new List<string>();
+            foreach (string pName in powerUpLevels.Keys)
+            {
+                names.Add(pName);
+            }
+
+            DataManager.instance.savedData.powerUpLevels = levels;
+            DataManager.instance.savedData.powerUpLevelNames = names;
+            DataManager.instance.Save();
+            /// Saving power up
+            
             return powerUpLevels[name];
         }
 

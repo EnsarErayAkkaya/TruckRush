@@ -63,11 +63,29 @@ namespace Project.Road
         public void TruckRoadIndexSet(Road road)
         {
             int currentRoad = roads.IndexOf(road);
-            if(currentRoad >= setting.roadTransportAfter)
+            int roadTransportCount = currentRoad - setting.roadTransportAfter;
+            for (int i = 0; i <= roadTransportCount; i++)
             {
                 TransportFirstRoadToEnd();
             }
         }
+
+        public Road GetClosestRoad(Vector3 point)
+        {
+            Road closest = null;
+            float closestDist = int.MaxValue;
+            foreach (Road item in roads)
+            {
+                float dist = Vector3.Distance(point, item.transform.position);
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closest = item;
+                }
+            }
+            return closest;
+        }
+
         private void TransportFirstRoadToEnd()
         {
             roadIndex++;

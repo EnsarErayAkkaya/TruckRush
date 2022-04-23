@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b320134b041ba7429b13a897898318d, type: 3}
+  m_Name: OffRoadObjectsSetting
+  m_EditorClassIdentifier: 
+  gasStationSetting:
+    gasStationPrefab: {fileID: 5899554912452911173, guid: 07cdb754e100fef4a9e868c8af301c91, type: 3}
+    gasStationSpawnAfter: 7
+    minGasStationFrequency: 2
+    maxGasStationFrequency: 5
+    minGasValue: 20
+    maxGasValue: 50
+    minRequiredCoinValue: 10
+    maxRequiredCoinValue: 20
+    gasStationLengthHalf: 20
+    gasStationHeightHalf: 0
+    gasStationWidthHalf: 0
+  bioms:
+  - biomType: 0
+    biomObjects:
+    - {fileID: 5036702050352664348, guid: 00ac017f979444a49a4ab94e46bc4375, type: 3}
+  offRoadObjectLength: 16
+  offRoadObjectWidth: 1.5
+  streetLightSetting:
+    streetLightPrefab: {fileID: 8677985589189482879, guid: 379a89646fc8b8b42b7b46556bfbb4fd, type: 3}
+    streetLightSpawnFreaquency: 25
+    maxStartingSpace: 20
+    streetLightHeight: 0
+    streetLightWidth: 0.5

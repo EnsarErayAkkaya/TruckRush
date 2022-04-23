@@ -2,6 +2,8 @@ using UnityEngine;
 using Project.Obstacles;
 using Project.Collectables;
 using Project.GameSystems;
+using Project.Interfaces;
+using Project.Utility;
 
 namespace Project.Player
 {
@@ -12,8 +14,22 @@ namespace Project.Player
         [SerializeField] private string gasStationTag;
         [SerializeField] private PlayerHealth playerHealth;
         [SerializeField] private PlayerFuel playerFuel;
+
+        private CameraShake cameraShake;
+        private void Start()
+        {
+            cameraShake = FindObjectOfType<CameraShake>();
+        }
         private void OnTriggerEnter(Collider collision)
         {
+            IFrangible frangible = collision.GetComponent<IFrangible>();
+
+            if (frangible != null)
+            {
+                AudioManager.instance.Play("frangibleCrash");
+                frangible.BreakOff();
+            }
+
             if (collision.CompareTag(obstacleTag))
             {
                 Obstacle o = collision.transform.GetComponent<Obstacle>();
@@ -30,15 +46,16 @@ namespace Project.Player
                     if (damage != -1)
                         playerHealth.Health -= damage;
                 }
+                cameraShake.Shake(1f, 5f);
             }
             else 
             {
                 Collectable c = collision.transform.GetComponent<Collectable>();
                 if(c != null)
                 {
+                    int value = c.OnPlayerCollided();
                     if (collision.CompareTag(coinTag))
                     {
-                        int value = c.OnPlayerCollided();
                         if (value != -1)
                         {
                             CoinManager.instance.GainCoin(value);
@@ -47,15 +64,10 @@ namespace Project.Player
                     }
                     else if (collision.CompareTag(gasStationTag))
                     {
-                        int value = c.OnPlayerCollided();
                         if (value != -1)
                         {
                             playerFuel.GainFuel(value);
                         }
-                    }
-                    else
-                    {
-                        c.OnPlayerCollided();
                     }
                 }
             }

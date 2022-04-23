@@ -30,20 +30,34 @@ namespace Project.GameSystems
             {
                 instance = this;
             }
-            creditCount = 1000;
-            onCreditChange?.Invoke(creditCount);
+            
             DontDestroyOnLoad(this);
+        }
+        private void Start()
+        {
+            creditCount = DataManager.instance.savedData.credit;
+            onCreditChange?.Invoke(creditCount);
+        }
+        public void DoubleGainedCredit()
+        {
+            creditCount += ScoreManager.instance.GainedCredit;
+            DataManager.instance.savedData.credit = creditCount;
+            DataManager.instance.Save();
         }
 
         public void GainCredit(int value)
         {
             creditCount += value;
             onCreditChange?.Invoke(creditCount);
+            DataManager.instance.savedData.credit = creditCount;
+            DataManager.instance.Save();
         }
         public void LoseCredit(int value)
         {
             creditCount -= value;
             onCreditChange?.Invoke(creditCount);
+            DataManager.instance.savedData.credit = creditCount;
+            DataManager.instance.Save();
         }
         public bool IsCreditSufficient(int requiredValue) 
         {

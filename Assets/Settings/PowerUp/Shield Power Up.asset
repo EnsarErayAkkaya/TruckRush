@@ -13,13 +13,30 @@ MonoBehaviour:
   m_Name: Shield Power Up
   m_EditorClassIdentifier: 
   name: shield
-  icon: {fileID: -1900836405344694469, guid: 84356da12a8249c499e709f4475f15d8, type: 3}
-  duration: 10
+  icon: {fileID: 21300000, guid: 97beff5a05f1a524283780ca0d2a4b83, type: 3}
   requiredActivationCredit: 800
   powerUpLevelDatas:
   - powerUpLevelData:
     - 11
-    requiredLevelCredit: 400
+    requiredLevelCredit: 1000
   - powerUpLevelData:
     - 12
-    requiredLevelCredit: 500
+    requiredLevelCredit: 2000
+  - powerUpLevelData:
+    - 13
+    requiredLevelCredit: 3000
+  - powerUpLevelData:
+    - 14
+    requiredLevelCredit: 4000
+  - powerUpLevelData:
+    - 15
+    requiredLevelCredit: 5000
+  - powerUpLevelData:
+    - 16
+    requiredLevelCredit: 6000
+  - powerUpLevelData:
+    - 17
+    requiredLevelCredit: 7000
+  - powerUpLevelData:
+    - 18
+    requiredLevelCredit: 8000

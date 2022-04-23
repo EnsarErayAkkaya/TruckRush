@@ -27,12 +27,14 @@ namespace Project.GameSystems
         [SerializeField] private float openLightsThreshold; // if sun intensity lower than threshold open lights
 
         private bool flow;
-        private int day;
+        private int day; // noy using for now but may be used in future
         private bool isLightOpened;
 
         public delegate void OnDayNightStateChange();
         public OnDayNightStateChange onDay;
         public OnDayNightStateChange onNight;
+
+        public bool IsDay => isLightOpened;
 
         public static DayNightManager instance;
         private void Awake()
@@ -106,6 +108,5 @@ namespace Project.GameSystems
         }
         private void StartFlow() => flow = true;
         private void StopFlow() => flow = false;
-
     }
 }

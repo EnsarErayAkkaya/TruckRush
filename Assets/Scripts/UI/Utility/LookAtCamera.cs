@@ -9,15 +9,18 @@ namespace Project.UI
 {
     public class LookAtCamera : MonoBehaviour
     {
-        private new Transform camera;
+        [SerializeField] private bool dontRotate180;
+        private Transform cam;
+        private int extraAngle;
         private void Start()
         {
-            camera = Camera.main.transform;
+            cam = Camera.main.transform;
+            extraAngle = dontRotate180 ? 0 : 180;
         }
         private void LateUpdate()
         {
-            transform.LookAt(camera);
-            transform.Rotate(0, 180, 0);
+            transform.LookAt(cam);
+            transform.Rotate(0, extraAngle, 0);
         }
     }
 }

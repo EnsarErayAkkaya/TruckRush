@@ -14,8 +14,8 @@ namespace Project.UI
 
         private void Start()
         {
-            CreatePowerUpItems();
             PowerUpManager.instance.onActivatedPowerUpsChange += CreatePowerUpItems;
+            CreatePowerUpItems();
         }
         private void OnDestroy()
         {

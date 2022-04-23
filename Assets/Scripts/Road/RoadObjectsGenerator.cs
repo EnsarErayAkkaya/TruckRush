@@ -9,38 +9,55 @@ namespace Project.Road
     public class RoadObjectsGenerator : MonoBehaviour
     {
         [SerializeField] private RoadObjectsSetting setting;
+        [SerializeField] private OffRoadObjectsSetting offRoadSetting;
 
         #region Spawners
         private BarricadeSpawner barricadeSpawner;
         private BigBarricadeSpawner bigBarricadeSpawner;
         private CoinSpawner coinSpawner;
-        private GasStationSpawner gasStationSpawner;
         private PowerUpSpawner powerUpSpawner;
         private DistanceMilestoneSpawner distanceMilestoneSpawner;
+        private CrossroadSpawner crossroadSpawner;
+        private WrenchSpawner wrenchSpawner;
+        private SpinTokenSpawner spinTokenSpawner;
         #endregion
+
+        private OffRoadObjectsGenerator offRoadObjectsGenerator;
+        private RoadSegmentation roadSegmentation;
 
         private float startingPoint;
         private float endingPoint;
 
-        private RoadSegmentation roadSegmentation;
         private Vector3 spawnPos;
         private bool onZAxis;
-        private int lastGasStationCreatedIndex;
+        // PowerUp
         private int lastPowerUpCreatedIndex;
-        private int lastBigBarricadeSpawnIndex;
+        // Milestone
         private float nextMileStone;
-        
+        //Big barricade
+        private int lastBigBarricadeSpawnIndex;
+        //Milestone
         public float totalLength;
+        //Crossroad
+        private int lastCrossroadSpawnIndex = -1;
+        private int crossroadCountOnRoad;
+        //Wrench
+        private int lastWrenchSpawnIndex = 0;
+        //Spin Token
+        private int lastSpinTokenSpawnIndex = 0;
         private void Awake()
         {
             roadSegmentation = new RoadSegmentation();
+            offRoadObjectsGenerator = new OffRoadObjectsGenerator(offRoadSetting);
 
             barricadeSpawner = new BarricadeSpawner(setting.barricadeSetting);
             bigBarricadeSpawner = new BigBarricadeSpawner(setting.bigBarricadeSetting);
             coinSpawner = new CoinSpawner(setting.coinSetting);
-            gasStationSpawner = new GasStationSpawner(setting.gasStationSetting);
             powerUpSpawner = new PowerUpSpawner(setting.powerUpSetting);
             distanceMilestoneSpawner = new DistanceMilestoneSpawner(setting.distanceMilestoneSetting);
+            crossroadSpawner = new CrossroadSpawner(setting.crossroadSetting);
+            wrenchSpawner = new WrenchSpawner(setting.wrenchSetting);
+            spinTokenSpawner = new SpinTokenSpawner(setting.spinTokenSetting);
             nextMileStone = ScoreManager.instance.GetNextMilestone();
         }
 
@@ -48,6 +65,10 @@ namespace Project.Road
         {
             this.onZAxis = onZAxis;
             float roadWidthHalf = ProceduralRoadGenerator.instance.Setting.roadWidthHalf;
+
+            // Reset resetable data
+            crossroadCountOnRoad = 0;
+            
             if (onZAxis)
             {
                 startingPoint = road.transform.position.z - roadLength / 2 - roadWidthHalf;
@@ -60,6 +81,8 @@ namespace Project.Road
                 endingPoint = road.transform.position.x + roadLength / 2 - roadWidthHalf;
                 spawnPos = new Vector3(startingPoint, 0, road.transform.position.z);
             }
+
+            offRoadObjectsGenerator.Set(road, onZAxis, startingPoint, endingPoint);
 
             // Generate Milestone
             if (totalLength + roadLength >= nextMileStone)
@@ -78,6 +101,8 @@ namespace Project.Road
             totalLength += roadLength;
 
             roadSegmentation.Set(startingPoint, endingPoint);
+
+            GenerateEmptySpace();
 
             int objectCount = ObjectCountAccordingToRoadLength(roadLength);
 
@@ -107,13 +132,15 @@ namespace Project.Road
         }
         private GameObject GenerateObstacle()
         {
-            int s = Random.Range(0, 2);
+            int s = Random.Range(0, 3);
             switch (s)
             {
                 case 0:
                     return GenerateBarricade();
                 case 1:
                     return GenerateBigBarricade();
+                case 2:
+                    return GenerateCrossroad();
                 default:
                     return null;
             }
@@ -143,8 +170,10 @@ namespace Project.Road
         }
         private GameObject GenerateBigBarricade()
         {
-            if (ProceduralRoadGenerator.instance.RoadIndex >= setting.bigBarricadeSetting.bigBarricadeSpawnAfter)
+            if (ProceduralRoadGenerator.instance.RoadIndex >= setting.bigBarricadeSetting.bigBarricadeSpawnAfter
+                && lastBigBarricadeSpawnIndex + setting.bigBarricadeSetting.bigBarricadeSpawnFreaquency < ProceduralRoadGenerator.instance.RoadIndex)
             {
+                lastBigBarricadeSpawnIndex = ProceduralRoadGenerator.instance.RoadIndex;
                 if (onZAxis)
                 {
                     float value = roadSegmentation.AllocateSpace(setting.bigBarricadeSetting.bigBarricadeLengthHalf * 2);
@@ -166,24 +195,52 @@ namespace Project.Road
             }
             return null;
         }
+        private GameObject GenerateCrossroad()
+        {
+            int roadIndex = ProceduralRoadGenerator.instance.RoadIndex;
+            if (roadIndex >= setting.crossroadSetting.crossroadSpawnAfter
+                && lastCrossroadSpawnIndex + setting.crossroadSetting.crossroadSpawnFreaquency < roadIndex
+                 || lastCrossroadSpawnIndex == roadIndex && crossroadCountOnRoad < setting.crossroadSetting.maxCrossroadOnRoad)
+            {
+                lastCrossroadSpawnIndex = ProceduralRoadGenerator.instance.RoadIndex;
+                crossroadCountOnRoad++;
+                if (onZAxis)
+                {
+                    float value = roadSegmentation.AllocateSpace(setting.bigBarricadeSetting.bigBarricadeLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.z = value;
+                        return crossroadSpawner.Spawn(spawnPos, onZAxis);
+                    }
+                }
+                else
+                {
+                    float value = roadSegmentation.AllocateSpace(setting.bigBarricadeSetting.bigBarricadeLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.x = value;
+                        return crossroadSpawner.Spawn(spawnPos, onZAxis);
+                    }
+                }
+            }
+            return null;
+        }
         private GameObject GenerateCollectable()
         {
-            int s = Random.Range(0, 3);
+            int s = Random.Range(0, 4);
             switch (s)
             {
                 case 0:
                     return GenerateCoin();
                 case 1:
-                    return GenerateGasStation();
-                case 2:
                     return GeneratePowerUp();
+                case 2:
+                    return GenerateWrench();
+                case 3:
+                    return GenerateSpinToken();
                 default:
                     return null;
             }
-        }
-        private GameObject GenerateCriterlessCollectable()
-        {
-            return GenerateCoin();
         }
         private GameObject GenerateCoin()
         {
@@ -203,6 +260,62 @@ namespace Project.Road
                 {
                     spawnPos.x = value;
                     return coinSpawner.Spawn(spawnPos, onZAxis);
+                }
+            }
+            return null;
+        }
+        private GameObject GenerateWrench()
+        {
+            int roadIndex = ProceduralRoadGenerator.instance.RoadIndex;
+            if (roadIndex >= setting.wrenchSetting.wrenchWillStartFrom &&
+                lastWrenchSpawnIndex + setting.wrenchSetting.minWrenchFrequency < roadIndex)
+            {
+                lastWrenchSpawnIndex = roadIndex;
+                if (onZAxis)
+                {
+                    float value = roadSegmentation.AllocateSpace(setting.wrenchSetting.wrenchLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.z = value;
+                        return wrenchSpawner.Spawn(spawnPos, onZAxis);
+                    }
+                }
+                else
+                {
+                    float value = roadSegmentation.AllocateSpace(setting.wrenchSetting.wrenchLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.x = value;
+                        return wrenchSpawner.Spawn(spawnPos, onZAxis);
+                    }
+                }
+            }
+            return null;
+        }
+        private GameObject GenerateSpinToken()
+        {
+            int roadIndex = ProceduralRoadGenerator.instance.RoadIndex;
+            if (roadIndex >= setting.spinTokenSetting.tokenWillStartFrom &&
+                lastSpinTokenSpawnIndex + setting.spinTokenSetting.minTokenFrequency < roadIndex)
+            {
+                lastSpinTokenSpawnIndex = roadIndex;
+                if (onZAxis)
+                {
+                    float value = roadSegmentation.AllocateSpace(setting.spinTokenSetting.spinTokenLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.z = value;
+                        return spinTokenSpawner.Spawn(spawnPos, onZAxis);
+                    }
+                }
+                else
+                {
+                    float value = roadSegmentation.AllocateSpace(setting.spinTokenSetting.spinTokenLengthHalf * 2);
+                    if (value != -1)
+                    {
+                        spawnPos.x = value;
+                        return spinTokenSpawner.Spawn(spawnPos, onZAxis);
+                    }
                 }
             }
             return null;
@@ -233,39 +346,6 @@ namespace Project.Road
                 }
             }
             return null;
-        }
-        private GameObject GenerateGasStation()
-        {
-            if (ProceduralRoadGenerator.instance.RoadIndex >= setting.gasStationSetting.gasStationSpawnAfter
-                && roadSegmentation.RoadLength >= setting.gasStationSetting.gasStationLengthHalf * 3
-                && roadSegmentation.RemainingLength >= setting.gasStationSetting.gasStationLengthHalf * 2
-                && lastGasStationCreatedIndex + setting.gasStationSetting.minGasStationFrequency <= ProceduralRoadGenerator.instance.RoadIndex)
-            {
-                lastGasStationCreatedIndex = ProceduralRoadGenerator.instance.RoadIndex;
-                if (onZAxis)
-                {
-                    float value = roadSegmentation.AllocateSpace(setting.gasStationSetting.gasStationLengthHalf * 2);
-                    if (value != -1)
-                    {
-                        spawnPos.z = value;
-                        return gasStationSpawner.Spawn(spawnPos, onZAxis);
-                    }
-                }
-                else
-                {
-                    float value = roadSegmentation.AllocateSpace(setting.gasStationSetting.gasStationLengthHalf * 2);
-                    if (value != -1)
-                    {
-                        spawnPos.x = value;
-                        return gasStationSpawner.Spawn(spawnPos, onZAxis);
-                    }
-                }
-                return null;
-            }
-            else
-            {
-                return GenerateCriterlessCollectable();
-            }
         }
         private void GenerateEmptySpace()
         {

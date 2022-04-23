@@ -31,32 +31,45 @@ namespace Project.Player
         private bool twoWheelOut;
         private bool checkWheelCollision = true;
 
+        private int soundIndex;
+
+        private void Start()
+        {
+            GameManager.instance.onResurrect += ResetWheelCollisions;
+            soundIndex = AudioManager.instance.GetAudioIndex("wheelOut");
+        }
+
         private void Update()
         {
             if (truckMovement.CanMove && checkWheelCollision)
             {
                 int sum = front_right + front_left + back_right + back_left;
 
+                if (sum != 4 && !AudioManager.instance.IsPlaying(soundIndex))
+                    AudioManager.instance.Play(soundIndex);
+                else if(sum == 4 && AudioManager.instance.IsPlaying(soundIndex))
+                    AudioManager.instance.Stop(soundIndex);
+                
                 if (sum == 2 && !twoWheelOut)
                 {
                     twoWheelOut = true;
                     wheelOutStartTime = Time.time;
                 }
-                else if (sum == 1 ||sum == 0)
+                else if (sum == 1 || sum == 0)
                 {
                     twoWheelOut = false;
                     truckMovement.Stop();
+                    StopWheelOutSound();
                     GameManager.instance.PlayerLost();
                 }
-                else
-                {
+                else if (sum > 2 && twoWheelOut)
                     twoWheelOut = false;
-                }
 
                 if (wheelOutStartTime + maxTwoWheelOutTime < Time.time && twoWheelOut)
                 {
                     truckMovement.Stop();
-                    //Debug.Log("2 Wheel out of road for too long");
+                    Debug.Log("2 Wheel out of road for too long");
+                    StopWheelOutSound();
                     GameManager.instance.PlayerLost();
                 }
             }
@@ -140,7 +153,33 @@ namespace Project.Player
                 backLeftWheelParticle.Stop();
 
             checkWheelCollision = false;
+
+            StopWheelOutSound();
         }
         public void CheckCollision() => checkWheelCollision = true;
+        private void StopWheelOutSound()
+        {
+            if (AudioManager.instance.IsPlaying(soundIndex))
+                AudioManager.instance.Stop(soundIndex);
+        }
+        public void ResetWheelCollisions()
+        {
+            if (frontRightWheelParticle.isPlaying)
+                frontRightWheelParticle.Stop();
+
+            if (frontLeftWheelParticle.isPlaying)
+                frontLeftWheelParticle.Stop();
+
+            if (backRightWheelParticle.isPlaying)
+                backRightWheelParticle.Stop();
+
+            if (backLeftWheelParticle.isPlaying)
+                backLeftWheelParticle.Stop();
+
+            front_right = 1;
+            front_left = 1;
+            back_left = 1;
+            back_right = 1;
+        }
     }
 }

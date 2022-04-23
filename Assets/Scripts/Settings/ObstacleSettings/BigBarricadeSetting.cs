@@ -7,6 +7,7 @@ namespace Project.Settings
     {
         public GameObject bigBarricadePrefab;
         public int bigBarricadeSpawnAfter;
+        public int bigBarricadeSpawnFreaquency;
         public float bigBarricadeLengthHalf;
         public float bigBarricadeHeightHalf;
         public float bigBarricadeWidthHalf;

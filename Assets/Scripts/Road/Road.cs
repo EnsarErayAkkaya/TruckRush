@@ -9,12 +9,16 @@ namespace Project.Road
         private List<GameObject> roadObjects = new List<GameObject>();
         private Vector3 startingPos;
         private float totalLength;
+        private bool onZAxis;
+
+        public bool OnZAxis => onZAxis;
         public void Set(Vector3 startingPos, float totalLength, bool onZAxis)
         {
             this.startingPos = startingPos;
             this.totalLength = totalLength;
-            if (!onZAxis)
-                roadSurface.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+            this.onZAxis = onZAxis;
+            if (this.onZAxis == false)
+                roadSurface.localRotation = Quaternion.Euler(new Vector3(0, 90, 0));
         }
         public float GetTotalLength( Vector3 currentPos)
         {

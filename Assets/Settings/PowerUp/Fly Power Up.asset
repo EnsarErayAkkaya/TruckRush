@@ -13,14 +13,38 @@ MonoBehaviour:
   m_Name: Fly Power Up
   m_EditorClassIdentifier: 
   name: fly
-  icon: {fileID: 611016873201127891, guid: 84356da12a8249c499e709f4475f15d8, type: 3}
-  duration: 10
+  icon: {fileID: 21300000, guid: d43dc9a0ba892b0458dc9fb0681062a5, type: 3}
   requiredActivationCredit: 500
   powerUpLevelDatas:
   - powerUpLevelData:
-    - 11
-    requiredLevelCredit: 100
-  - powerUpLevelData:
     - 12
-    requiredLevelCredit: 300
-  extraSpeed: 10
+    - 10
+    requiredLevelCredit: 1000
+  - powerUpLevelData:
+    - 13
+    - 11
+    requiredLevelCredit: 2000
+  - powerUpLevelData:
+    - 14
+    - 11
+    requiredLevelCredit: 3000
+  - powerUpLevelData:
+    - 14
+    - 12
+    requiredLevelCredit: 4000
+  - powerUpLevelData:
+    - 15
+    - 12
+    requiredLevelCredit: 5000
+  - powerUpLevelData:
+    - 16
+    - 13
+    requiredLevelCredit: 6000
+  - powerUpLevelData:
+    - 17
+    - 13
+    requiredLevelCredit: 7000
+  - powerUpLevelData:
+    - 18
+    - 14
+    requiredLevelCredit: 8000

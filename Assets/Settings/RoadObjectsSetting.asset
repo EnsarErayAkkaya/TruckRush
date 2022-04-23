@@ -15,45 +15,35 @@ MonoBehaviour:
   roadObjectCounts:
   - length: 10
     min: 0
-    max: 2
+    max: 3
   - length: 25
-    min: 0
-    max: 5
-  - length: 50
-    min: 1
-    max: 7
-  - length: 75
     min: 2
-    max: 8
-  - length: 90
+    max: 7
+  - length: 50
     min: 3
+    max: 8
+  - length: 75
+    min: 5
     max: 9
+  - length: 90
+    min: 5
+    max: 10
   barricadeSetting:
-    barricadePrefab: {fileID: 1348773960222542354, guid: 05e75df258bb9ee49afb724a2a8e1bb3, type: 3}
+    barricadePrefab: {fileID: 4390734541377491399, guid: 05e75df258bb9ee49afb724a2a8e1bb3, type: 3}
     barricadeWidthHalf: 1.5
     barricadeLengthHalf: 2
-    barricadeHeightHalf: 0.75
+    barricadeHeightHalf: 0
   bigBarricadeSetting:
     bigBarricadePrefab: {fileID: 8659664659905055480, guid: 3ae30be02673be24dbce8cbfe2a6cb58, type: 3}
-    bigBarricadeSpawnAfter: 0
-    bigBarricadeLengthHalf: 6
+    bigBarricadeSpawnAfter: 3
+    bigBarricadeSpawnFreaquency: 2
+    bigBarricadeLengthHalf: 5
     bigBarricadeHeightHalf: 0
     bigBarricadeWidthHalf: 9
   coinSetting:
     CoinPrefab: {fileID: 6118065314425493049, guid: b25db8e58bcd7684eaf43b06d9ea8459, type: 3}
-    coinsLengthHalf: 3
+    coinsLengthHalf: 4
     coinsHeightHalf: 0.75
-  gasStationSetting:
-    gasStationPrefab: {fileID: 5899554912452911173, guid: 07cdb754e100fef4a9e868c8af301c91, type: 3}
-    gasStationSpawnAfter: 5
-    minGasStationFrequency: 3
-    minGasValue: 10
-    maxGasValue: 80
-    minRequiredCoinValue: 10
-    maxRequiredCoinValue: 40
-    gasStationLengthHalf: 20
-    gasStationHeightHalf: 0
-    gasStationWidthHalf: 12.5
   powerUpSetting:
     PowerUpPrefab: {fileID: 2248883568626830247, guid: ba872552b7098964cbb5d4bde6f7e7d1, type: 3}
     powerUpLengthHalf: 2
@@ -63,5 +53,26 @@ MonoBehaviour:
   distanceMilestoneSetting:
     milestonePrefab: {fileID: 5110322330555485358, guid: aced366c2abae8d4cae086955a164b1b, type: 3}
     milestoneHeightHalf: 0.05
-  minEmptySpaceLength: 2
-  maxEmptySpaceLength: 10
+  crossroadSetting:
+    crossroadPrefab: {fileID: 4588120301534766034, guid: c5e73a30a2549a645acc12ee6595a5a6, type: 3}
+    crossroadLengthHalf: 3
+    crossroadHeight: 0.05
+    crossroadSpawnAfter: 5
+    crossroadSpawnFreaquency: 4
+    maxCrossroadOnRoad: 2
+    minDamage: 2
+    maxDamage: 10
+  wrenchSetting:
+    WrenchPrefab: {fileID: 2758922087932306278, guid: c2c3fedf02aa3d24f9edf12e84d6ffca, type: 3}
+    wrenchLengthHalf: 2
+    wrenchHeightHalf: 0.1
+    minWrenchFrequency: 8
+    wrenchWillStartFrom: 10
+  spinTokenSetting:
+    spinTokenPrefab: {fileID: 7176377974035790941, guid: 75a77915ecfd53f4790c2560b982127e, type: 3}
+    spinTokenLengthHalf: 8
+    spinTokenHeightHalf: 1.5
+    minTokenFrequency: 5
+    tokenWillStartFrom: 12
+  minEmptySpaceLength: 5
+  maxEmptySpaceLength: 18

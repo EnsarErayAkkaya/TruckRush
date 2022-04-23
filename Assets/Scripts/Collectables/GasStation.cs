@@ -17,10 +17,12 @@ namespace Project.Collectables
 
         public override int OnPlayerCollided()
         {
-            if (CoinManager.instance.IsCoinSufficient(requiredCoin))
+            if (CoinManager.instance.IsCoinSufficient(requiredCoin) && !destroyed)
             {
+                PlayCollectSound();
+                destroyed = true;
                 CoinManager.instance.LoseCoin(requiredCoin);
-                return base.OnPlayerCollided();
+                return value;
             }
             return -1;
         }

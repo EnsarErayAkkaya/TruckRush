@@ -21,12 +21,16 @@ namespace Project.Settings
         public BigBarricadeSetting bigBarricadeSetting;
         [Header("Coin Setting")]
         public CoinSetting coinSetting;
-        [Header("Gas Station Setting")]
-        public GasStationSetting gasStationSetting;
         [Header("Power Up Setting")]
         public PowerUpSetting powerUpSetting;
         [Header("Distance Milestone Setting")]
         public DistanceMilestoneSetting distanceMilestoneSetting;
+        [Header("Crossroad Setting")]
+        public CrossroadSetting crossroadSetting;
+        [Header("Wrench Setting")]
+        public WrenchSetting wrenchSetting;
+        [Header("Spin Token Setting")]
+        public SpinTokenSetting spinTokenSetting;
         [Header("Empty Space Setting")]
         public float minEmptySpaceLength;
         public float maxEmptySpaceLength;

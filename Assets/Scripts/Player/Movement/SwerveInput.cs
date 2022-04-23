@@ -12,7 +12,7 @@ namespace Project.Player
 #if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN
             if (Input.GetMouseButton(0))
             {
-                swerveVector = -(startingPoint - (Vector2)Input.mousePosition).normalized;
+                swerveVector = ((Vector2)Input.mousePosition - startingPoint).normalized;
             }
             if (Input.GetMouseButtonDown(0))
             {

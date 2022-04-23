@@ -14,18 +14,27 @@ namespace Project.UI
         [SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private TextMeshProUGUI requiredCredit;
         [SerializeField] private Image icon;
+        [SerializeField] private GameObject levelUpButton;
         private PowerUp powerUp;
         private int level;
 
         public void Set(PowerUp p, int lvl)
         {
-            title.text = p.name;
-            icon.sprite = p.icon;
+            this.title.text = p.name;
+            this.icon.sprite = p.icon;
             this.powerUp = p;
-            Debug.Log("power up " + powerUp.name + ", level :" + lvl);
-            levelText.text = lvl < p.powerUpLevelDatas.Count-1? lvl.ToString() : "Max";
-            requiredCredit.text = level != powerUp.powerUpLevelDatas.Count - 1 ? powerUp.powerUpLevelDatas[level + 1].requiredLevelCredit.ToString() : "";
-            level = lvl;
+            this.level = lvl;
+
+            levelText.text = "Lv." + (lvl < p.powerUpLevelDatas.Count-1? (level + 1).ToString() : "\nMax");
+            if(level != powerUp.powerUpLevelDatas.Count - 1)
+            {
+                requiredCredit.text = powerUp.powerUpLevelDatas[level + 1].requiredLevelCredit.ToString();
+            }
+            else
+            {
+                requiredCredit.gameObject.SetActive(false);
+            }
+            levelUpButton.SetActive(level != powerUp.powerUpLevelDatas.Count - 1);
         }
 
         public void UpgradePowerUp()
@@ -34,8 +43,16 @@ namespace Project.UI
             {
                 CreditManager.instance.LoseCredit(powerUp.powerUpLevelDatas[level + 1].requiredLevelCredit);
                 level = PowerUpManager.instance.IncreasePowerUpLevel(powerUp.name);
-                levelText.text = level != powerUp.powerUpLevelDatas.Count - 1 ? level.ToString() : "Max";
-                requiredCredit.text = level != powerUp.powerUpLevelDatas.Count - 1 ? powerUp.powerUpLevelDatas[level + 1].requiredLevelCredit.ToString() : "";
+                levelText.text = "Lv." + (level != powerUp.powerUpLevelDatas.Count - 1 ? (level +1).ToString() : "\nMax");
+                if (level != powerUp.powerUpLevelDatas.Count - 1)
+                {
+                    requiredCredit.text = powerUp.powerUpLevelDatas[level + 1].requiredLevelCredit.ToString();
+                }
+                else
+                {
+                    requiredCredit.gameObject.SetActive(false);
+                }
+                levelUpButton.SetActive(level != powerUp.powerUpLevelDatas.Count - 1);
             }
         }
     }
